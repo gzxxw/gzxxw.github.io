@@ -68,8 +68,8 @@ var GB_ENABLED = SUPABASE_URL.indexOf("YOUR-PROJECT") === -1;
       el.addEventListener("mouseenter", function () {
         icon.classList.add("animate__animated", anim);
         icon.addEventListener("animationend", function done() {
-          icon.classList.remove("animate__animated", anim))
-          icon.removeEventListener("animationend", done)
+          icon.classList.remove("animate__animated", anim);
+          icon.removeEventListener("animationend", done);
         });
       });
     });
@@ -89,7 +89,7 @@ function esc(s) {
 
 function renderMessages(rows) {
   if (!rows || rows.length === 0) {
-    listEl.innerHTML = '<p class="gb-empty"><i class="icon-couch gb-ico" aria-hidden="true"></i>还没未留言，沙发等你来抢</p>';
+    listEl.innerHTML = '<p class="gb-empty"><i class="icon-couch gb-ico" aria-hidden="true"></i>还没有留言，沙发等你来抢</p>';
     return;
   }
   listEl.innerHTML = rows.map(function (r) {
@@ -107,7 +107,7 @@ function renderMessages(rows) {
   }).join("");
 }
 
-/* ---------- ⤣ 自动过滤（关键词 + 频率ム ( 消意心效） ---------- */
+/* ---------- ④ 自动过滤（关键词 + 频率 + 链接清洗） ---------- */
 var BLOCK_WORDS = ["代开发", "加微信", "加v", "兼职", "刷单", "博彩",
   "赌博", "贷款", "办证", "发票", "外挂", "sf", "私服", "广告"];
 
@@ -120,24 +120,24 @@ function autoFilter(name, content) {
   // 1. 敏感词
   for (var i = 0; i < BLOCK_WORDS.length; i++) {
     if (text.indexOf(BLOCK_WORDS[i].toLowerCase()) !== -1) {
-      return "内宸包含敏感词，已拦截";
+      return "内容包含敏感词，已拦截";
     }
   }
   // 2. 广告链接
   if (linkRe.test(text)) {
-    return "留言里低计放链接，广告党退散";
+    return "留言里不让放链接，广告党退散";
   }
-  // 3. 频率限制：60 祮充丌一步览器3肷发 3 条
+  // 3. 频率限制：60 秒内同一浏览器最多发 3 条
   var now = Date.now();
   recentPosts = recentPosts.filter(function (t) { return now - t < 60000; });
   if (recentPosts.length >= 3) {
-    return "发太快啦，歇口渔再写";
+    return "发太快啦，歇口气再写";
   }
   recentPosts.push(now);
   return null;
 }
 
-/* ---------- ⤤ 提交与加载 ---------- */
+/* ---------- ⑤ 提交与加载 ---------- */
 var formEl = document.getElementById("guestbook-form");
 var nameEl = document.getElementById("gb-name");
 var textEl = document.getElementById("gb-text");
