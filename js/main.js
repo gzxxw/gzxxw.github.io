@@ -26,8 +26,8 @@
  * 4. 然后去 Supabase 后台 Tables → messages，手动把垃圾/新留言的 status
  *    改成 'approved' 才会显示（自动过滤只挡明显垃圾，人工审核兜底）。
  */
-var SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
-var SUPABASE_ANON_KEY = "YOUR-ANON-KEY";
+var SUPABASE_URL = "https://upbeqehjtwoytrnsqauc.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwYmVxZWhqdHdveXRybnNxYXVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNDgyNDEsImV4cCI6MjEwMTkyNDI0MX0.7rqDzGeTZhcrcykgo7YnTJSiHkzukrvqo2LkIG6xVBA";
 
 var GB_ENABLED = SUPABASE_URL.indexOf("YOUR-PROJECT") === -1;
 
