@@ -31,25 +31,51 @@ var SUPABASE_ANON_KEY = "YOUR-ANON-KEY";
 
 var GB_ENABLED = SUPABASE_URL.indexOf("YOUR-PROJECT") === -1;
 
-/* ---------- ② 轻特效：滚动淡入 ---------- */
-(function initFadeIn() {
-  var els = document.querySelectorAll(".card, .hobby-list li, .gb-item, .section-title");
-  els.forEach(function (el) {
-    el.classList.add("fade-in");
-  });
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-    els.forEach(function (el) { io.observe(el); });
-  } else {
-    els.forEach(function (el) { el.classList.add("visible"); });
+/* ---------- ② 动效：AOS 滚动出现 + Typed.js 打字机 + Animate.css hover ---------- */
+(function initEffects() {
+  if (window.AOS) {
+    AOS.init({
+      once: true,      // 只播一次，滚动回来不重播，省性能
+      duration: 600,
+      offset: 80,
+      easing: "ease-out-cubic"
+    });
   }
+
+  if (window.Typed && document.getElementById("typed")) {
+    new Typed("#typed", {
+      strings: [
+        "「原神」提瓦特观光团 · UID 277743783",
+        "「崩坏：星穹铁道」开拓者 · UID 117119074",
+        "折腾 AI，让 AI 干活而不是被 AI 干",
+        "写点小工具，顺便解决自己的问题",
+        "白天刷题，晚上搞机，偶尔登登游戏"
+      ],
+      typeSpeed: 55,
+      backSpeed: 26,
+      backDelay: 1700,
+      startDelay: 400,
+      loop: true,
+      smartBackspace: false
+    });
+  }
+
+  // hover 小动画：Animate.css 在鼠标移入时触发一次，播完自动摘类
+  function bindHoverAnim(selector, anim, iconSel) {
+    document.querySelectorAll(selector).forEach(function (el) {
+      var icon = el.querySelector(iconSel);
+      if (!icon) return;
+      el.addEventListener("mouseenter", function () {
+        icon.classList.add("animate__animated", anim);
+        icon.addEventListener("animationend", function done() {
+          icon.classList.remove("animate__animated", anim);
+          icon.removeEventListener("animationend", done);
+        });
+      });
+    });
+  }
+  bindHoverAnim(".card", "animate__rubberBand", ".card-icon i");
+  bindHoverAnim(".hobby-list li", "animate__heartBeat", ".hobby-ico i");
 })();
 
 /* ---------- ③ 留言渲染 ---------- */
@@ -58,12 +84,12 @@ var statusEl = document.getElementById("gb-status");
 
 function esc(s) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;").replace(/"/g, """);
+          .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 function renderMessages(rows) {
   if (!rows || rows.length === 0) {
-    listEl.innerHTML = '<p class="gb-empty">还没有留言，沙发等你来抢 🛋️</p>';
+    listEl.innerHTML = '<p class="gb-empty"><i class="fa-solid fa-couch gb-ico" aria-hidden="true"></i>还没有留言，沙发等你来抢</p>';
     return;
   }
   listEl.innerHTML = rows.map(function (r) {
@@ -94,18 +120,18 @@ function autoFilter(name, content) {
   // 1. 敏感词
   for (var i = 0; i < BLOCK_WORDS.length; i++) {
     if (text.indexOf(BLOCK_WORDS[i].toLowerCase()) !== -1) {
-      return "内容包含敏感词，已拦截 🚫";
+      return "内容包含敏感词，已拦截";
     }
   }
   // 2. 广告链接
   if (linkRe.test(text)) {
-    return "留言里不让放链接，广告党退散 🚫";
+    return "留言里不让放链接，广告党退散";
   }
   // 3. 频率限制：60 秒内同一浏览器最多发 3 条
   var now = Date.now();
   recentPosts = recentPosts.filter(function (t) { return now - t < 60000; });
   if (recentPosts.length >= 3) {
-    return "发太快啦，歇口气再写 🐢";
+    return "发太快啦，歇口气再写";
   }
   recentPosts.push(now);
   return null;
@@ -122,7 +148,7 @@ function showStatus(msg, isError) {
 }
 
 if (!GB_ENABLED) {
-  showStatus("留言区还没配置 Supabase，先在 js/main.js 顶部填上 URL 和 Key（见注释）😉", true);
+  showStatus("留言区还没配置 Supabase，先在 js/main.js 顶部填上 URL 和 Key（见注释）", true);
   listEl.innerHTML = '<p class="gb-empty">留言功能待配置…</p>';
 } else {
   fetch(SUPABASE_URL + "/rest/v1/messages?select=*&status=eq.approved&order=created_at.desc&limit=50", {
@@ -169,13 +195,13 @@ if (!GB_ENABLED) {
         return res.json();
       })
       .then(function () {
-        showStatus("收到！我先审核一下，很快就能看到啦 ✅");
+        showStatus("收到！我先审核一下，很快就能看到啦");
         nameEl.value = "";
         textEl.value = "";
       })
       .catch(function (err) {
         console.error(err);
-        showStatus("发送失败，检查一下网络或 Supabase 配置 😅", true);
+        showStatus("发送失败，检查一下网络或 Supabase 配置", true);
       })
       .finally(function () {
         btn.disabled = false;

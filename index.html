@@ -3,8 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lim</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <title>Lim | 高中生的极客小站</title>
+  <meta name="description" content="Lim，高一学生。喜欢原神和崩坏：星穹铁道，研究 AI，写点解决自己问题的小工具。这里放着我的作品、爱好和一些想法。">
+  <meta name="author" content="Lim">
+  <meta name="theme-color" content="#FAF6F0">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lim | 高中生的极客小站">
+  <meta property="og:description" content="高一学生，玩原神和星穹铁道，研究 AI，写点小工具。作品与爱好都在这里。">
+  <meta property="og:url" content="https://gzxxw.github.io/">
+  <link rel="canonical" href="https://gzxxw.github.io/">
+  <!-- favicon：终端风 SVG（原 emoji favicon 已替换） -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23E8652D'/%3E%3Cpath d='M14 20l12 12-12 12' stroke='%23fff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Crect x='32' y='40' width='18' height='6' rx='3' fill='%23fff'/%3E%3C/svg%3E">
+
+  <!-- 字体：霞鹜文楷（中文，unicode-range 分片按需加载）+ Inter（西文）+ JetBrains Mono（代码），jsDelivr 国内可用 -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/600.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/400.css">
+
+  <!-- 图标：Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+
+  <!-- 动效：AOS（滚动出现）+ Animate.css（hover 小动画） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,7 +36,7 @@
   <!-- 顶部导航 -->
   <header class="nav">
     <div class="nav-inner">
-      <a class="nav-logo" href="#top">Lim</a>
+      <a class="nav-logo" href="#top"><i class="fa-solid fa-terminal nav-logo-ico" aria-hidden="true"></i>Lim</a>
       <nav class="nav-links">
         <a href="#works">作品</a>
         <a href="#about">爱好</a>
@@ -26,20 +50,35 @@
     <!-- 首屏 -->
     <section class="hero">
       <div class="hero-inner">
-        <h1 class="hero-title">Lim</h1>
-        <p class="hero-desc">我是 Lim，高一学生。平时喜欢折腾点小工具，研究研究 AI，偶尔玩玩游戏。这里放了些我做的东西，欢迎随便看看。</p>
-        <a class="btn" href="#works">看看我的作品 ↓</a>
+        <h1 class="hero-title" data-aos="fade-down">Lim</h1>
+        <p class="hero-desc" data-aos="fade-up" data-aos-delay="100">我是 Lim，高一学生。平时喜欢折腾点小工具，研究研究 AI，偶尔玩玩游戏。这里放了些我做的东西，欢迎随便看看。</p>
+
+        <!-- 终端窗口：Typed.js 打字机 -->
+        <div class="terminal" data-aos="fade-up" data-aos-delay="200" aria-hidden="true">
+          <div class="terminal-bar">
+            <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+            <span class="terminal-title">lim@homepage: ~</span>
+          </div>
+          <div class="terminal-body">
+            <p class="terminal-line"><span class="prompt">$</span> whoami</p>
+            <p class="terminal-line terminal-out">Lim · 高一在读 · 白天刷题，晚上搞机</p>
+            <p class="terminal-line"><span class="prompt">$</span> cat interests.txt</p>
+            <p class="terminal-line terminal-out"><span id="typed"></span></p>
+          </div>
+        </div>
+
+        <a class="btn" href="#works" data-aos="fade-up" data-aos-delay="300">看看我的作品 <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
       </div>
     </section>
 
     <!-- 作品卡片 -->
     <section id="works" class="section">
       <div class="container">
-        <h2 class="section-title">作品</h2>
+        <h2 class="section-title" data-aos="fade-up">作品</h2>
         <div class="card-grid">
 
-          <a class="card" href="https://gzxxw.github.io/math" target="_blank" rel="noopener">
-            <div class="card-icon">📐</div>
+          <a class="card" href="https://gzxxw.github.io/math" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="0">
+            <div class="card-icon"><i class="fa-solid fa-square-root-variable" aria-hidden="true"></i></div>
             <h3 class="card-title">高中数学刷题本</h3>
             <p class="card-desc">自己刷题用的小工具，带解析、错题本和云端同步。</p>
             <div class="card-tags">
@@ -49,13 +88,23 @@
             </div>
           </a>
 
-          <a class="card" href="https://gzxxw.github.io/scsjyzx-mirror" target="_blank" rel="noopener">
-            <div class="card-icon">🏫</div>
+          <a class="card" href="https://gzxxw.github.io/scsjyzx-mirror" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-icon"><i class="fa-solid fa-school" aria-hidden="true"></i></div>
             <h3 class="card-title">江油中学镜像站</h3>
             <p class="card-desc">学校官网访问不畅时应急用的静态镜像，信息以官网为准。</p>
             <div class="card-tags">
               <span class="tag">公益</span>
               <span class="tag">技术</span>
+            </div>
+          </a>
+
+          <a class="card" href="https://github.com/gzxxw" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="200">
+            <div class="card-icon"><i class="fa-brands fa-github" aria-hidden="true"></i></div>
+            <h3 class="card-title">GitHub @gzxxw</h3>
+            <p class="card-desc">更多半成品和小实验都在这里，欢迎围观、提意见。</p>
+            <div class="card-tags">
+              <span class="tag">开源</span>
+              <span class="tag">持续更新</span>
             </div>
           </a>
 
@@ -66,12 +115,24 @@
     <!-- 爱好 / 技能 -->
     <section id="about" class="section section-alt">
       <div class="container">
-        <h2 class="section-title">爱好 / 技能</h2>
+        <h2 class="section-title" data-aos="fade-up">爱好 / 技能</h2>
         <ul class="hobby-list">
-          <li>🎮 <strong>原神</strong> — UID 277743783</li>
-          <li>🚄 <strong>崩坏：星穹铁道</strong> — UID 117119074</li>
-          <li>🤖 <strong>操纵 AI</strong> — 研究怎么让 AI 干活，而不是被 AI 干</li>
-          <li>🛠️ <strong>写小工具</strong> — 刷题本就是证据</li>
+          <li data-aos="fade-right" data-aos-delay="0">
+            <span class="hobby-ico"><i class="fa-solid fa-gamepad" aria-hidden="true"></i></span>
+            <div><strong>原神</strong> — 提瓦特大陆观光团<span class="uid">UID 277743783</span></div>
+          </li>
+          <li data-aos="fade-right" data-aos-delay="100">
+            <span class="hobby-ico"><i class="fa-solid fa-train-subway" aria-hidden="true"></i></span>
+            <div><strong>崩坏：星穹铁道</strong> — 开拓者上车了<span class="uid">UID 117119074</span></div>
+          </li>
+          <li data-aos="fade-right" data-aos-delay="200">
+            <span class="hobby-ico"><i class="fa-solid fa-robot" aria-hidden="true"></i></span>
+            <div><strong>操纵 AI</strong> — 研究怎么让 AI 干活，而不是被 AI 干</div>
+          </li>
+          <li data-aos="fade-right" data-aos-delay="300">
+            <span class="hobby-ico"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i></span>
+            <div><strong>写小工具</strong> — 刷题本就是证据</div>
+          </li>
         </ul>
       </div>
     </section>
@@ -79,10 +140,10 @@
     <!-- 留言区 -->
     <section id="guestbook" class="section">
       <div class="container">
-        <h2 class="section-title">留言</h2>
-        <p class="section-sub">不用注册，随便说两句，夸我损我都行。</p>
-        <div id="guestbook-list" class="guestbook-list"></div>
-        <form id="guestbook-form" class="guestbook-form">
+        <h2 class="section-title" data-aos="fade-up">留言</h2>
+        <p class="section-sub" data-aos="fade-up" data-aos-delay="100">不用注册，随便说两句，夸我损我都行。</p>
+        <div id="guestbook-list" class="guestbook-list" data-aos="fade-up" data-aos-delay="150"></div>
+        <form id="guestbook-form" class="guestbook-form" data-aos="fade-up" data-aos-delay="200">
           <input id="gb-name" type="text" maxlength="20" placeholder="昵称（最多 20 字）" required>
           <textarea id="gb-text" rows="3" maxlength="200" placeholder="说点什么…（最多 200 字）" required></textarea>
           <button class="btn" type="submit">发送留言</button>
@@ -97,10 +158,13 @@
   <footer class="footer">
     <div class="footer-inner">
       <p>© 2026 Lim · 联系方式：<a href="mailto:lzy45400@gmail.com">lzy45400@gmail.com</a></p>
-      <p class="footer-sub">Made with ❤️ by Lim · Hosted on GitHub Pages</p>
+      <p class="footer-sub">Made with <i class="fa-solid fa-heart footer-heart" aria-hidden="true"></i> by Lim · Hosted on GitHub Pages</p>
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <!-- 动效脚本：AOS + Typed.js（defer，不阻塞渲染） -->
+  <script defer src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <script defer src="js/main.js"></script>
 </body>
 </html>
