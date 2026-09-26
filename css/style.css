@@ -336,6 +336,34 @@ a:hover { opacity: 0.85; }
 .footer-sub { font-size: 13px; margin-top: 6px; opacity: 0.7; }
 .footer-heart { color: #FF6B57; }
 
+/* ===== 本地 SVG 图标（mask 方式：零请求 + currentColor 着色） ===== */
+.icon-terminal, .icon-arrow-down, .icon-square-root-variable, .icon-school,
+.icon-github, .icon-gamepad, .icon-train-subway, .icon-robot,
+.icon-screwdriver-wrench, .icon-heart, .icon-couch {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  vertical-align: -0.125em;
+}
+.icon-terminal            { -webkit-mask-image: url("../assets/icons/terminal.svg");            mask-image: url("../assets/icons/terminal.svg"); }
+.icon-arrow-down          { -webkit-mask-image: url("../assets/icons/arrow-down.svg");          mask-image: url("../assets/icons/arrow-down.svg"); }
+.icon-square-root-variable{ -webkit-mask-image: url("../assets/icons/square-root-variable.svg"); mask-image: url("../assets/icons/square-root-variable.svg"); }
+.icon-school              { -webkit-mask-image: url("../assets/icons/school.svg");              mask-image: url("../assets/icons/school.svg"); }
+.icon-github              { -webkit-mask-image: url("../assets/icons/github.svg");              mask-image: url("../assets/icons/github.svg"); }
+.icon-gamepad             { -webkit-mask-image: url("../assets/icons/gamepad.svg");             mask-image: url("../assets/icons/gamepad.svg"); }
+.icon-train-subway        { -webkit-mask-image: url("../assets/icons/train-subway.svg");        mask-image: url("../assets/icons/train-subway.svg"); }
+.icon-robot               { -webkit-mask-image: url("../assets/icons/robot.svg");               mask-image: url("../assets/icons/robot.svg"); }
+.icon-screwdriver-wrench  { -webkit-mask-image: url("../assets/icons/screwdriver-wrench.svg");  mask-image: url("../assets/icons/screwdriver-wrench.svg"); }
+.icon-heart               { -webkit-mask-image: url("../assets/icons/heart.svg");               mask-image: url("../assets/icons/heart.svg"); }
+.icon-couch               { -webkit-mask-image: url("../assets/icons/couch.svg");               mask-image: url("../assets/icons/couch.svg"); }
+
 /* ===== 响应式 ===== */
 @media (max-width: 640px) {
   .hero-title { font-size: 52px; }
