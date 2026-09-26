@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lim</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#top">Lim</a>
+      <nav class="nav-links">
+        <a href="#works">作品</a>
+        <a href="#about">爱好</a>
+        <a href="#guestbook">留言</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- 首屏 -->
+    <section class="hero">
+      <div class="hero-inner">
+        <h1 class="hero-title">Lim</h1>
+        <p class="hero-desc">我是 Lim，高一学生。平时喜欢折腾点小工具，研究研究 AI，偶尔玩玩游戏。这里放了些我做的东西，欢迎随便看看。</p>
+        <a class="btn" href="#works">看看我的作品 ↓</a>
+      </div>
+    </section>
+
+    <!-- 作品卡片 -->
+    <section id="works" class="section">
+      <div class="container">
+        <h2 class="section-title">作品</h2>
+        <div class="card-grid">
+
+          <a class="card" href="https://gzxxw.github.io/math" target="_blank" rel="noopener">
+            <div class="card-icon">📐</div>
+            <h3 class="card-title">高中数学刷题本</h3>
+            <p class="card-desc">自己刷题用的小工具，带解析、错题本和云端同步。</p>
+            <div class="card-tags">
+              <span class="tag">工具</span>
+              <span class="tag">学习</span>
+              <span class="tag">自研</span>
+            </div>
+          </a>
+
+          <a class="card" href="https://gzxxw.github.io/scsjyzx-mirror" target="_blank" rel="noopener">
+            <div class="card-icon">🏫</div>
+            <h3 class="card-title">江油中学镜像站</h3>
+            <p class="card-desc">学校官网访问不畅时应急用的静态镜像，信息以官网为准。</p>
+            <div class="card-tags">
+              <span class="tag">公益</span>
+              <span class="tag">技术</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 爱好 / 技能 -->
+    <section id="about" class="section section-alt">
+      <div class="container">
+        <h2 class="section-title">爱好 / 技能</h2>
+        <ul class="hobby-list">
+          <li>🎮 <strong>原神</strong> — UID 277743783</li>
+          <li>🚄 <strong>崩坏：星穹铁道</strong> — UID 117119074</li>
+          <li>🤖 <strong>操纵 AI</strong> — 研究怎么让 AI 干活，而不是被 AI 干</li>
+          <li>🛠️ <strong>写小工具</strong> — 刷题本就是证据</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 留言区 -->
+    <section id="guestbook" class="section">
+      <div class="container">
+        <h2 class="section-title">留言</h2>
+        <p class="section-sub">不用注册，随便说两句，夸我损我都行。</p>
+        <div id="guestbook-list" class="guestbook-list"></div>
+        <form id="guestbook-form" class="guestbook-form">
+          <input id="gb-name" type="text" maxlength="20" placeholder="昵称（最多 20 字）" required>
+          <textarea id="gb-text" rows="3" maxlength="200" placeholder="说点什么…（最多 200 字）" required></textarea>
+          <button class="btn" type="submit">发送留言</button>
+        </form>
+        <p id="gb-status" class="guestbook-status"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>© 2026 Lim · 联系方式：<a href="mailto:lzy45400@gmail.com">lzy45400@gmail.com</a></p>
+      <p class="footer-sub">Made with ❤️ by Lim · Hosted on GitHub Pages</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
