@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lim | 高中生的极客小站</title>
   <meta name="description" content="Lim，高一学生。喜欢原神和崩坏：星穹铁道，研究 AI，写点解决自己问题的小工具。这里放着我的作品、爱好和一些想法。">
   <meta name="author" content="Lim">
-  <meta name="theme-color" content="#FAF6F0">
+  <meta name="theme-color" content="#0a0a0a">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Lim | 高中生的极客小站">
   <meta property="og:description" content="高一学生，玩原神和星穹铁道，研究 AI，写点小工具。作品与爱好都在这里。">
   <meta property="og:url" content="https://gzxxw.github.io/">
   <link rel="canonical" href="https://gzxxw.github.io/">
-  <!-- favicon：终端风 SVG -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23E8652D'/%3E%3Cpath d='M14 20l12 12-12 12' stroke='%23fff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Crect x='32' y='40' width='18' height='6' rx='3' fill='%23fff'/%3E%3C/svg%3E">
+  <!-- favicon：品牌蓝终端风 SVG -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236799FE'/%3E%3Cpath d='M14 20l12 12-12 12' stroke='%230a0a0a' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Crect x='32' y='40' width='18' height='6' rx='3' fill='%230a0a0a'/%3E%3C/svg%3E">
 
-  <!-- 字体：霞鹜文楷（中文）+ Inter（西文）+ JetBrains Mono（代码），jsDelivr 国内可用 -->
+  <!-- 字体：Host Grotesk（标题）+ DM Sans（正文）+ Fragment Mono（代码），jsDelivr 国内可用 -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/400.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/600.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/host-grotesk@5.3.0/600.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/host-grotesk@5.3.0/700.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@5.3.0/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@5.3.0/500.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@5.3.0/600.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fragment-mono@5.3.0/400.css">
 
   <!-- 图标：全部内联本地 SVG（mask 方式），零第三方图标请求 -->
 
@@ -49,14 +51,19 @@
     <!-- 首屏 -->
     <section class="hero">
       <div class="hero-inner">
-        <h1 class="hero-title" data-aos="fade-down">Lim</h1>
-        <p class="hero-desc" data-aos="fade-up" data-aos-delay="100">我是 Lim，高一学生。平时喜欢折腾点小工具，研究研究 AI，偶尔玩玩游戏。这里放了些我做的东西，欢迎随便看看。</p>
+        <span class="hero-badge" data-aos="fade-down">
+          <span class="hero-badge-dot"></span>Lim · 开发者预览版
+        </span>
+        <h1 class="hero-title" data-aos="fade-down" data-aos-delay="50">Lim</h1>
+        <p class="hero-sub" data-aos="fade-up" data-aos-delay="100">一切皆折腾 · 白天刷题，晚上搞机</p>
+        <p class="hero-desc" data-aos="fade-up" data-aos-delay="150">我是 Lim，高一学生。平时喜欢折腾点小工具，研究研究 AI，偶尔玩玩游戏。这里放了些我做的东西，欢迎随便看看。</p>
 
         <!-- 终端窗口：Typed.js 打字机 -->
         <div class="terminal" data-aos="fade-up" data-aos-delay="200" aria-hidden="true">
           <div class="terminal-bar">
             <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
             <span class="terminal-title">lim@homepage: ~</span>
+            <span class="terminal-tag">bash</span>
           </div>
           <div class="terminal-body">
             <p class="terminal-line"><span class="prompt">$</span> whoami</p>
@@ -66,7 +73,10 @@
           </div>
         </div>
 
-        <a class="btn" href="#works" data-aos="fade-up" data-aos-delay="300">看看我的作品 <i class="icon-arrow-down" aria-hidden="true"></i></a>
+        <div class="hero-actions" data-aos="fade-up" data-aos-delay="300">
+          <a class="btn btn-primary" href="#works">看看我的作品 <i class="icon-arrow-down" aria-hidden="true"></i></a>
+          <a class="btn btn-secondary" href="https://github.com/gzxxw" target="_blank" rel="noopener noreferrer">GitHub @gzxxw</a>
+        </div>
       </div>
     </section>
 
@@ -145,7 +155,7 @@
         <form id="guestbook-form" class="guestbook-form" data-aos="fade-up" data-aos-delay="200">
           <input id="gb-name" type="text" maxlength="20" placeholder="昵称（最多 20 字）" required>
           <textarea id="gb-text" rows="3" maxlength="200" placeholder="说点什么…（最多 200 字）" required></textarea>
-          <button class="btn" type="submit">发送留言</button>
+          <button class="btn btn-primary" type="submit">发送留言</button>
         </form>
         <p id="gb-status" class="guestbook-status"></p>
       </div>
