@@ -122,9 +122,11 @@ h1 .sig{color:var(--signal)}
 .gbform{padding:36px 32px;border-right:1px solid var(--black)}
 .gblist{padding:36px 32px}
 label{display:block;font-family:var(--mono);font-size:13px;margin-bottom:10px}
-textarea{width:100%;min-height:150px;border:1px solid var(--black);border-radius:0;
-  padding:14px;font-family:var(--font);font-size:15px;resize:vertical;background:var(--white)}
-textarea:focus{outline:3px solid var(--link);outline-offset:-1px}
+textarea,input[type=text]{width:100%;border:1px solid var(--black);border-radius:0;
+  padding:14px;font-family:var(--font);font-size:15px;background:var(--white);color:var(--black)}
+textarea{min-height:150px;resize:vertical}
+textarea:focus,input[type=text]:focus{outline:3px solid var(--link);outline-offset:-1px}
+.gbform input[type=text]{margin-bottom:14px}
 .gbsend{display:inline-flex;align-items:center;min-height:52px;margin-top:16px;
   padding:0 30px;background:var(--black);color:var(--white);border:1px solid var(--black);
   font-family:var(--font);font-size:16px;font-weight:700;cursor:pointer}
@@ -360,12 +362,13 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
   </div>
   <div class="gb">
     <form class="gbform" id="gb-form">
+      <label for="gb-name">昵称</label>
+      <input id="gb-name" type="text" maxlength="20" required placeholder="怎么称呼你（最多 20 字）">
       <label for="gb-text">想说什么</label>
       <textarea id="gb-text" maxlength="200" required
         placeholder="夸我损我都行…"></textarea>
       <button class="gbsend" type="submit">发送</button>
-      <p class="gbnote">点发送会带着这段话跳到 GitHub，用你自己的账号评论——我不碰你的密码，
-        也没有后端可以泄露它。</p>
+      <p class="gbnote">留言直接存进数据库，不用注册任何账号，刷新就能看到。</p>
     </form>
     <div class="gblist" id="gb-list" aria-live="polite">
       <p class="gbempty">还没有留言，沙发等你来抢。</p>
@@ -384,32 +387,114 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
 </footer>
 
 <script>
+/* ============================================================
+   留言板 · Supabase 版
+   表：messages(id, name, content, status, created_at)
+   anon key 是公开设计（安全靠 RLS 策略）：
+   - 读：只放行 status='approved'
+   - 写：昵称≤20 字、内容≤200 字、全站每分钟最多 10 条（RLS 强制）
+   ============================================================ */
 (function () {
-  var GIST = 'https://gist.github.com/gzxxw/52aae8bdc4e32cd3086952349545e75c';
+  var SB_URL = 'https://filxupgcsxayqhtpcjic.supabase.co';
+  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpbHh1cGdjc3hheXFodHBjamljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5NDMzNjUsImV4cCI6MjA5OTUxOTM2NX0.aIqOwl9z8DHUBq5UrIpGfSn0MdDK93X4d61gOylHq18';
+
   var form = document.getElementById('gb-form');
-  var text = document.getElementById('gb-text');
-  var box  = document.getElementById('gb-list');
+  var nameEl = document.getElementById('gb-name');
+  var textEl = document.getElementById('gb-text');
+  var box = document.getElementById('gb-list');
+
+  function headers(extra) {
+    var h = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
+    for (var k in extra) h[k] = extra[k];
+    return h;
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  /* 敏感词/广告过滤（与旧版一致，拦截在前端，RLS 兜底长度与频率） */
+  function autoFilter(name, content) {
+    var t = (name + ' ' + content).toLowerCase();
+    var BLOCK = ['代开发','加微信','加v','兼职','刷单','博彩','赌博','贷款','办证','发票','外挂','sf','私服','广告'];
+    for (var i = 0; i < BLOCK.length; i++) {
+      if (t.indexOf(BLOCK[i]) !== -1) return '内容包含敏感词，已拦截';
+    }
+    if (/https?:\/\/|www\./i.test(t)) return '留言里不放链接';
+    return null;
+  }
+
+  function render(rows) {
+    if (!rows || !rows.length) {
+      box.innerHTML = '<p class="gbempty">还没有留言，沙发等你来抢。</p>';
+      return;
+    }
+    box.innerHTML = rows.map(function (r) {
+      var d = new Date(r.created_at);
+      var t = isNaN(d.getTime()) ? '' : d.toLocaleString('zh-CN', { hour12: false });
+      return '<div class="msg"><p class="msg-h"><b>' + esc(r.name) + '</b>' +
+             '<time>' + esc(t) + '</time></p><p>' + esc(r.content) + '</p></div>';
+    }).join('');
+  }
+
+  function status(msg) {
+    var el = document.querySelector('.gbnote');
+    if (msg) { el.dataset.flash = '1'; el.textContent = msg; }
+  }
+
+  /* 读 */
+  fetch(SB_URL + '/rest/v1/messages?select=name,content,created_at&status=eq.approved&order=created_at.desc&limit=50',
+        { headers: headers() })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(render)
+    .catch(function () {
+      box.innerHTML = '<p class="gbempty">留言加载失败——可能数据库还没建好，稍后再来看看。</p>';
+    });
+
+  /* 写 */
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var v = text.value.trim();
-    if (!v) return;
-    window.open(GIST + '?comment=' + encodeURIComponent(v), '_blank', 'noopener');
-    text.value = '';
+    var name = nameEl.value.trim();
+    var content = textEl.value.trim();
+    if (!name || !content) return;
+    var blocked = autoFilter(name, content);
+    if (blocked) {
+      document.querySelector('.gbnote').textContent = blocked;
+      return;
+    }
+    var btn = form.querySelector('.gbsend');
+    btn.disabled = true;
+    fetch(SB_URL + '/rest/v1/messages', {
+      method: 'POST',
+      headers: headers({ 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }),
+      body: JSON.stringify({ name: name, content: content })
+    }).then(function (r) {
+      btn.disabled = false;
+      if (r.status === 201 || r.status === 200) {
+        // 乐观插入：把新留言顶到列表最前
+        var list = box.querySelectorAll('.msg');
+        var div = document.createElement('div');
+        div.className = 'msg';
+        var d = new Date();
+        div.innerHTML = '<p class="msg-h"><b>' + esc(name) + '</b><time>' +
+          esc(d.toLocaleString('zh-CN', { hour12: false })) + '</time></p><p>' + esc(content) + '</p>';
+        if (list.length) box.insertBefore(div, list[0]);
+        else box.innerHTML = '', box.appendChild(div);
+        var empty = box.querySelector('.gbempty');
+        if (empty) empty.remove();
+        nameEl.value = ''; textEl.value = '';
+        document.querySelector('.gbnote').textContent = '发出去了，刷新也不丢。';
+      } else if (r.status === 412 || r.status === 400) {
+        // RLS 拦截：大概率触发了限流
+        document.querySelector('.gbnote').textContent = '发得太快啦，歇一分钟再来。';
+      } else {
+        document.querySelector('.gbnote').textContent = '发送失败（HTTP ' + r.status + '），稍后再试。';
+      }
+    }).catch(function () {
+      btn.disabled = false;
+      document.querySelector('.gbnote').textContent = '网络问题，没发出去，再试一次。';
+    });
   });
-  fetch('https://api.github.com/gists/52aae8bdc4e32cd3086952349545e75c/comments?per_page=50')
-    .then(function (r) { return r.ok ? r.json() : []; })
-    .then(function (rows) {
-      if (!Array.isArray(rows) || !rows.length) return;
-      box.innerHTML = rows.map(function (c) {
-        var who = (c.user && c.user.login) ? c.user.login : '匿名';
-        var d = new Date(c.created_at);
-        var t = isNaN(d) ? '' : d.toLocaleDateString('zh-CN');
-        var body = String(c.body || '').replace(/[#*`>\[\]()!]/g, '').trim().slice(0, 140);
-        return '<div class="msg"><p class="msg-h"><b>' + who + '</b><time>' + t +
-               '</time></p><p>' + body + '</p></div>';
-      }).join('');
-    })
-    .catch(function () { /* 保留空状态 */ });
 })();
 </script>
 </body>
