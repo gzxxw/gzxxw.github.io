@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lim — 高中数学刷题本 · 江油中学镜像站</title>
-<meta name="description" content="Lim，高一在读。两个已上线的作品：200 章高中数学刷题本，306 文件的学校官网静态镜像。">
+<meta name="description" content="Lim，高一在读。两个已上线的站、三个开源项目：200 章数学刷题本、学校官网镜像、Unity 手游逆向复刻、两个 AI 插件。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Lim — 我做出来两个东西，现在就能点开">
 <meta property="og:description" content="200 章高中数学刷题本 + 306 文件学校官网静态镜像，都是已上线的真实产品。">
@@ -117,14 +117,6 @@ h1 .sig{color:var(--signal)}
 .ana{font-size:13px;line-height:1.6;color:#999;margin-top:10px;border-top:1px dashed #444;
   padding-top:8px}
 
-/* ---- 爱好：低层信息，紧凑列表 ---- */
-.plays{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--black)}
-.play{padding:26px 24px;border-right:1px solid var(--black)}
-.play:last-child{border-right:0}
-.play h3{font-size:19px;font-weight:900;margin-bottom:6px}
-.play p{font-size:14px;color:#444;line-height:1.6}
-.play .uid{font-family:var(--mono);font-size:12px;color:var(--grey);margin-top:10px}
-
 /* ---- 留言 ---- */
 .gb{display:grid;grid-template-columns:5fr 7fr;border-bottom:1px solid var(--black)}
 .gbform{padding:36px 32px;border-right:1px solid var(--black)}
@@ -170,10 +162,9 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
 
 /* ---- 响应式 ---- */
 @media(max-width:900px){
-  .works,.works.rev,.gb,.plays{grid-template-columns:1fr}
+  .works,.works.rev,.gb{grid-template-columns:1fr}
   .wmain{border-right:0!important;border-left:0!important;border-bottom:1px solid var(--black)}
   .works.rev .wmain{border-left:0}
-  .play{border-right:0;border-bottom:1px solid var(--black)}
   .topdate{display:none}
 }
 @media(max-width:640px){
@@ -194,7 +185,6 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
     <a class="brand" href="#top">LIM<em>.</em></a>
     <nav class="topnav" aria-label="主导航">
       <a href="#work">作品</a>
-      <a href="#play">爱好</a>
       <a href="#guest">留言</a>
     </nav>
     <span class="topdate">GITHUB PAGES · STATIC</span>
@@ -223,10 +213,11 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
     <span>抽象函数零点判断</span><span>… 共 200 章</span>
   </div>
   <div class="wrap hero-in">
-    <p class="kicker"><b>已上线 ×2</b> 不是计划，不是作业</p>
-    <h1>我做出来两个东西，<span class="sig">现在就能点开</span>。</h1>
-    <p class="standfirst">Lim，高一在读。一个把高中数学拆成 <b>200 章</b>的刷题本，
-      一个在学校官网打不开时顶上来的<b>静态镜像</b>。都是纯前端，代码公开，就挂在这个域名下面。</p>
+    <p class="kicker"><b>上线 ×2 · 开源 ×3</b> 不是计划，不是作业</p>
+    <h1>我做出来五个东西，<span class="sig">两个现在就能点开</span>。</h1>
+    <p class="standfirst">Lim，高一在读。两个已经上线的站，三个在 GitHub 里的项目——
+      一个把高中数学拆成 <b>200 章</b>的刷题本，一份学校官网的<b>静态镜像</b>，
+      一次 Unity 手游的<b>完整逆向复刻</b>，还有两个手机端 AI 插件。代码全部公开。</p>
     <div class="hero-cta">
       <a class="cta-a pri" href="https://gzxxw.github.io/math" target="_blank" rel="noopener">打开刷题本</a>
       <a class="cta-a" href="https://gzxxw.github.io/scsjyzx-mirror" target="_blank" rel="noopener">打开镜像站</a>
@@ -294,42 +285,77 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
       </ul>
     </div>
   </div>
+
+  <div class="works">
+    <div class="wmain">
+      <p class="cat"><i>逆向复刻</i> github.com/gzxxw/cola-jump-h5</p>
+      <h3>可乐跳跳瓶 · 网页版</h3>
+      <p>把一个 Unity 手游的 APK 拆开，把里面的东西一件一件搬出来，再用 three.js 重新拼成一个
+        能在浏览器里玩的横屏游戏。贴图、模型、音效、字体、关卡数据全部出自原版 APK，未凭空创作。</p>
+      <a class="golink" href="https://github.com/gzxxw/cola-jump-h5" target="_blank" rel="noopener">看仓库</a>
+    </div>
+    <div class="wside">
+      <h4>从 APK 里搬出来的</h4>
+      <ul class="spec">
+        <li>3D 网格 Mesh<b>340</b></li>
+        <li>贴图 Texture<b>229</b></li>
+        <li>材质 Material<b>110</b></li>
+        <li>精灵 Sprite<b>116</b></li>
+        <li>音效<b>42</b></li>
+        <li>关卡配方<b class="hi">500 关</b></li>
+        <li>引擎<b>three.js</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="works rev">
+    <div class="wmain">
+      <p class="cat"><i>插件</i> github.com/gzxxw/sensenova-sidebar</p>
+      <h3>商汤生图侧边栏</h3>
+      <p>Operit 平台的侧边栏插件：配置 API Key 之后，在侧边栏里输入提示词就能生成图片，
+        也能选一张本地图片让 AI 按指令改。生成走后台任务，切去干别的它继续跑。</p>
+      <a class="golink" href="https://github.com/gzxxw/sensenova-sidebar" target="_blank" rel="noopener">看仓库</a>
+    </div>
+    <div class="wside">
+      <h4>它是怎么做的</h4>
+      <ul class="spec">
+        <li>架构<b>纯 JS</b></li>
+        <li>文生图<b>sensenova-u1.5</b></li>
+        <li>图生图编辑<b>支持</b></li>
+        <li>后台任务<b class="hi">破 15s 限制</b></li>
+        <li>限流处理<b>429 自动重试</b></li>
+        <li>本地服务依赖<b>0</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="works">
+    <div class="wmain">
+      <p class="cat"><i>插件</i> github.com/gzxxw/aihub-agent-swarm</p>
+      <h3>AIHub 多 Agent 协作台</h3>
+      <p>把平台里原生的多个模型包装成各管一摊的 agent：说一个任务，编排 agent 自动拆解分派，
+        大家在各自会话里并行干活，最后汇总成一份结果。全部走平台原生模型配置，零 API Key。</p>
+      <a class="golink" href="https://github.com/gzxxw/aihub-agent-swarm" target="_blank" rel="noopener">看仓库</a>
+    </div>
+    <div class="wside">
+      <h4>协作方式</h4>
+      <ul class="spec">
+        <li>独立 agent<b>5 个模型</b></li>
+        <li>任务编排<b>自动拆解分派</b></li>
+        <li>执行方式<b class="hi">并行·独立会话</b></li>
+        <li>计划模式<b>先确认再派发</b></li>
+        <li>API Key<b>0</b></li>
+      </ul>
+    </div>
+  </div>
 </section>
 
-<!-- 爱好 -->
-<section id="play" aria-label="爱好">
-  <div class="wrap">
-    <div class="sechead">
-      <span class="no">SEC.02</span><h2>不写代码的时候</h2>
-    </div>
-  </div>
-  <div class="plays">
-    <div class="play">
-      <h3>原神</h3>
-      <p>提瓦特大陆观光团，主要业务是看风景。</p>
-      <p class="uid">UID 277743783</p>
-    </div>
-    <div class="play">
-      <h3>星穹铁道</h3>
-      <p>开拓者已经上车，列车正在往前开。</p>
-      <p class="uid">UID 117119074</p>
-    </div>
-    <div class="play">
-      <h3>操纵 AI</h3>
-      <p>研究怎么让 AI 干活，而不是被 AI 干。</p>
-    </div>
-    <div class="play">
-      <h3>写小工具</h3>
-      <p>遇到麻烦就自己写一个解决掉，上面那两个产品就是这么来的。</p>
-    </div>
-  </div>
-</section>
 
 <!-- 留言 -->
 <section id="guest" aria-label="留言">
   <div class="wrap">
     <div class="sechead">
-      <span class="no">SEC.03</span><h2>留句话</h2>
+      <span class="no">SEC.02</span><h2>留句话</h2>
     </div>
   </div>
   <div class="gb">
