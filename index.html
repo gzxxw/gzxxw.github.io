@@ -53,12 +53,18 @@ section{border-top:1px solid var(--black)}
 .topdate{margin-left:auto;display:flex;align-items:center;padding-left:22px;
   font-family:var(--mono);font-size:12px;color:var(--grey);white-space:nowrap}
 
-/* ---- 首屏：章节名文字墙压巨号标题 ---- */
-.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--black)}
-.wall{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:flex-start;
-  gap:0 18px;padding:20px 32px;font-family:var(--mono);font-size:13px;line-height:2.1;
-  color:var(--black);opacity:.16;user-select:none;pointer-events:none;overflow:hidden}
+/* ---- 首屏 ---- */
+.hero{border-bottom:1px solid var(--black)}
+/* 章节墙：固定层，贯穿整站，随滚动视差漂移 */
+.wall{position:fixed;left:0;right:0;top:-25%;height:150%;z-index:0;
+  display:flex;flex-wrap:wrap;align-content:flex-start;gap:0 18px;padding:20px 32px;
+  font-family:var(--mono);font-size:13px;line-height:2.1;color:var(--black);
+  opacity:.13;user-select:none;pointer-events:none;overflow:hidden;
+  will-change:transform}
 .wall span{white-space:nowrap}
+/* 内容层抬到墙之上 */
+main,footer{position:relative;z-index:1}
+section{background:transparent}
 .hero-in{position:relative;padding:88px 0 72px}
 .kicker{font-family:var(--mono);font-size:13px;letter-spacing:.02em;margin-bottom:18px}
 .kicker b{background:var(--signal);color:var(--white);padding:2px 8px;font-weight:700}
@@ -120,7 +126,46 @@ h1 .sig{color:var(--signal)}
 /* ---- 留言 ---- */
 .gb{display:grid;grid-template-columns:5fr 7fr;border-bottom:1px solid var(--black)}
 .gbform{padding:36px 32px;border-right:1px solid var(--black)}
-.gblist{padding:36px 32px}
+.gblist{padding:36px 32px;position:relative}
+/* 弹幕舞台 */
+.barrage{position:relative;height:360px;border:1px solid var(--black);overflow:hidden;
+  background:var(--white)}
+.barrage.paused .br-item{animation-play-state:paused}
+.br-item{position:absolute;left:100%;white-space:nowrap;font-size:15px;font-weight:700;
+  padding:5px 12px;background:var(--black);color:var(--white);border:1px solid var(--black);
+  cursor:pointer;user-select:none;animation:fly linear forwards}
+.br-item:nth-child(3n+1){background:var(--signal);border-color:var(--black);color:var(--white)}
+.br-item:nth-child(3n){background:var(--white);color:var(--black)}
+.br-item:hover{outline:3px solid var(--link);outline-offset:-1px}
+.br-item .who{font-family:var(--mono);font-size:12px;opacity:.75;margin-right:8px}
+@keyframes fly{to{transform:translateX(calc(-100vw - 100%))}}
+.br-hint{position:absolute;left:0;right:0;bottom:0;padding:8px 12px;background:rgba(0,0,0,.85);
+  color:#fff;font-family:var(--mono);font-size:12px;display:flex;justify-content:space-between;
+  align-items:center;gap:12px}
+.br-hint button{font:inherit;background:none;border:1px solid #fff;color:#fff;cursor:pointer;
+  padding:3px 10px;min-height:32px}
+.br-hint button:hover{background:#fff;color:#000}
+/* 验证行 */
+.captcha{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+.captcha .q{font-family:var(--mono);font-size:15px;color:var(--black)}
+.captcha input{width:88px;padding:10px;font-size:15px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+/* 弹窗 */
+.modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.72);padding:24px}
+.modal.open{display:flex}
+.modal-box{background:var(--white);border:2px solid var(--black);max-width:520px;width:100%;
+  padding:32px;position:relative;box-shadow:12px 12px 0 var(--signal)}
+.modal-box h3{font-size:26px;font-weight:900;letter-spacing:-.02em;margin-bottom:6px}
+.modal-box .m-meta{font-family:var(--mono);font-size:12px;color:var(--grey);margin-bottom:16px}
+.modal-box .m-body{font-size:16px;line-height:1.7;word-break:break-word}
+.modal-x{position:absolute;top:10px;right:10px;min-width:44px;min-height:44px;border:1px solid var(--black);
+  background:var(--white);font-size:20px;font-weight:900;cursor:pointer;line-height:1}
+.modal-x:hover{background:var(--black);color:var(--white)}
+.modal-ok{display:inline-flex;align-items:center;min-height:48px;margin-top:22px;padding:0 26px;
+  background:var(--black);color:var(--white);border:1px solid var(--black);font-family:var(--font);
+  font-size:15px;font-weight:700;cursor:pointer}
+.modal-ok:hover{background:var(--signal)}
 label{display:block;font-family:var(--mono);font-size:13px;margin-bottom:10px}
 textarea,input[type=text]{width:100%;border:1px solid var(--black);border-radius:0;
   padding:14px;font-family:var(--font);font-size:15px;background:var(--white);color:var(--black)}
@@ -160,6 +205,10 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
 }
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
+  .br-item{animation:none;position:static;display:block;white-space:normal;
+    margin-bottom:6px;cursor:default}
+  .barrage{height:auto;max-height:360px;overflow-y:auto;padding:10px}
+  .wall{transform:none!important}
 }
 
 /* ---- 响应式 ---- */
@@ -176,11 +225,31 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
   .topnav a{padding:0 12px;font-size:13px}
   .brand{padding-right:12px}
   .wmain,.wside,.gbform,.gblist{padding:26px 18px}
+  .barrage{height:300px}
   .opts{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
+
+<!-- 200 章真实目录墙：固定背景层，随滚动漂移 -->
+<div class="wall" id="wall" aria-hidden="true">
+    <span>等式变形</span><span>不等式解法</span><span>集合概念</span><span>子集概念</span>
+    <span>交并补运算</span><span>集合综合大题练习</span><span>集合易错大盘点</span>
+    <span>集合新定义问题</span><span>充分必要条件</span><span>全称与存在量词</span>
+    <span>不等式的性质</span><span>基本不等式</span><span>基本不等式进阶</span>
+    <span>二次函数的a、b、c、Δ和韦达</span><span>二次函数图像分布问题</span>
+    <span>引课: 高中为什么用f(x)</span><span>函数概念+定义域</span><span>函数解析式求法</span>
+    <span>分式函数的值域</span><span>函数单调性</span><span>函数奇偶性</span>
+    <span>单调奇偶性复习</span><span>单调奇偶性拓展</span><span>抽象</span><span>恒成立</span>
+    <span>双函数题</span><span>幂函数</span><span>分数指数幂的计算</span><span>指数函数</span>
+    <span>对数定义+基本运算规则</span><span>对数换底公式+练习</span><span>对数函数</span>
+    <span>初等函数知识串讲</span><span>指数、对数大小比较题型</span>
+    <span>初等函数图像与性质考点解析</span><span>指数、对数的增长力量</span>
+    <span>同底问题的解题思路总结</span><span>零点存在定理的应用</span>
+    <span>复合函数零点问题</span><span>分段函数最值思路</span><span>分段函数的零点问题</span>
+    <span>抽象函数零点判断</span><span>… 共 200 章</span>
+</div>
 
 <header class="topbar">
   <div class="wrap topbar-in">
@@ -197,23 +266,6 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
 
 <!-- 首屏 -->
 <section class="hero" aria-label="介绍">
-  <div class="wall" aria-hidden="true">
-    <span>等式变形</span><span>不等式解法</span><span>集合概念</span><span>子集概念</span>
-    <span>交并补运算</span><span>集合综合大题练习</span><span>集合易错大盘点</span>
-    <span>集合新定义问题</span><span>充分必要条件</span><span>全称与存在量词</span>
-    <span>不等式的性质</span><span>基本不等式</span><span>基本不等式进阶</span>
-    <span>二次函数的a、b、c、Δ和韦达</span><span>二次函数图像分布问题</span>
-    <span>引课: 高中为什么用f(x)</span><span>函数概念+定义域</span><span>函数解析式求法</span>
-    <span>分式函数的值域</span><span>函数单调性</span><span>函数奇偶性</span>
-    <span>单调奇偶性复习</span><span>单调奇偶性拓展</span><span>抽象</span><span>恒成立</span>
-    <span>双函数题</span><span>幂函数</span><span>分数指数幂的计算</span><span>指数函数</span>
-    <span>对数定义+基本运算规则</span><span>对数换底公式+练习</span><span>对数函数</span>
-    <span>初等函数知识串讲</span><span>指数、对数大小比较题型</span>
-    <span>初等函数图像与性质考点解析</span><span>指数、对数的增长力量</span>
-    <span>同底问题的解题思路总结</span><span>零点存在定理的应用</span>
-    <span>复合函数零点问题</span><span>分段函数最值思路</span><span>分段函数的零点问题</span>
-    <span>抽象函数零点判断</span><span>… 共 200 章</span>
-  </div>
   <div class="wrap hero-in">
     <p class="kicker"><b>上线 ×2 · 开源 ×3</b> 不是计划，不是作业</p>
     <h1>我做出来五个东西，<span class="sig">两个现在就能点开</span>。</h1>
@@ -367,20 +419,58 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
       <label for="gb-text">想说什么</label>
       <textarea id="gb-text" maxlength="200" required
         placeholder="夸我损我都行…"></textarea>
+      <div class="captcha">
+        <span class="q" id="cap-q">算一下：? + ? = ?</span>
+        <label class="hp" for="cap-a">答案</label>
+        <input id="cap-a" type="text" inputmode="numeric" autocomplete="off"
+          placeholder="答案">
+      </div>
       <button class="gbsend" type="submit">发送</button>
-      <p class="gbnote">留言直接存进数据库，不用注册任何账号，刷新就能看到。</p>
+      <p class="gbnote" id="gb-note">留言会变成弹幕飘过整屏，点它就能看全文。</p>
+      <!-- 蜜罐：真人看不见，机器人会填 -->
+      <div class="hp" aria-hidden="true">
+        <label for="gb-web">网站</label>
+        <input id="gb-web" type="text" tabindex="-1" autocomplete="off">
+      </div>
     </form>
-    <div class="gblist" id="gb-list" aria-live="polite">
-      <p class="gbempty">还没有留言，沙发等你来抢。</p>
+    <div class="gblist">
+      <div class="barrage" id="barrage" role="log" aria-live="polite"
+        aria-label="留言弹幕"></div>
+      <div class="br-hint">
+        <span id="br-count">0 条留言</span>
+        <button type="button" id="br-toggle" aria-pressed="false">暂停</button>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- 弹幕详情弹窗 -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="md-title">
+  <div class="modal-box">
+    <button class="modal-x" id="md-x" type="button" aria-label="关闭">×</button>
+    <h3 id="md-title">昵称</h3>
+    <p class="m-meta" id="md-meta">时间</p>
+    <p class="m-body" id="md-body">内容</p>
+    <button class="modal-ok" id="md-ok" type="button">知道了</button>
+  </div>
+</div>
+
+<!-- 限流弹窗 -->
+<div class="modal" id="modal-warn" role="dialog" aria-modal="true" aria-labelledby="mw-title">
+  <div class="modal-box">
+    <button class="modal-x" id="mw-x" type="button" aria-label="关闭">×</button>
+    <h3 id="mw-title">慢一点</h3>
+    <p class="m-meta" id="mw-meta">RATE LIMIT</p>
+    <p class="m-body" id="mw-body">发得太快了。</p>
+    <button class="modal-ok" id="mw-ok" type="button">好，我等等</button>
+  </div>
+</div>
 
 </main>
 
 <footer>
   <div class="wrap foot">
-    <p class="motto">一切皆折腾<em>·</em>晚上搞机，白天刷题</p>
+    <p class="motto">小看山<em>·</em>来日见</p>
     <p class="fine">© 2026 Lim · <a href="mailto:lzy45400@gmail.com">lzy45400@gmail.com</a>
       · <a href="https://github.com/gzxxw" target="_blank" rel="noopener">GitHub</a></p>
   </div>
@@ -388,80 +478,193 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
 
 <script>
 /* ============================================================
-   留言板 · Supabase 版
-   表：messages(id, name, content, status, created_at)
-   anon key 是公开设计（安全靠 RLS 策略）：
-   - 读：只放行 status='approved'
-   - 写：昵称≤20 字、内容≤200 字、全站每分钟最多 10 条（RLS 强制）
+   留言板 · Supabase + 弹幕 + 限流 + 机器人验证
+   表 messages(id,name,content,status,created_at)，安全边界在 RLS：
+     读  只放行 status='approved'
+     写  昵称1-20字、内容1-200字、全站每分钟≤10条
+   本文件另加三道客户端闸门：算术验证、蜜罐、本机限流（localStorage）
    ============================================================ */
 (function () {
   var SB_URL = 'https://upbeqehjtwoytrnsqauc.supabase.co';
   var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwYmVxZWhqdHdveXRybnNxYXVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNDgyNDEsImV4cCI6MjEwMTkyNDI0MX0.7rqDzGeTZhcrcykgo7YnTJSiHkzukrvqo2LkIG6xVBA';
 
+  /* 本机限流：3 条/小时，超了弹框 */
+  var LIMIT_MAX = 3, LIMIT_WINDOW = 60 * 60 * 1000, LS_KEY = 'lim_gb_ts_v1';
+
   var form = document.getElementById('gb-form');
   var nameEl = document.getElementById('gb-name');
   var textEl = document.getElementById('gb-text');
-  var box = document.getElementById('gb-list');
+  var note = document.getElementById('gb-note');
+  var stage = document.getElementById('barrage');
+  var toggle = document.getElementById('br-toggle');
+  var countEl = document.getElementById('br-count');
+  var capQ = document.getElementById('cap-q');
+  var capA = document.getElementById('cap-a');
+  var honeypot = document.getElementById('gb-web');
 
-  function headers(extra) {
-    var h = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
-    for (var k in extra) h[k] = extra[k];
-    return h;
+  /* ---------- 工具 ---------- */
+  function headers(x) { var h = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }; for (var k in x) h[k] = x[k]; return h; }
+  function esc(v) { return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function fmt(iso) { var d = new Date(iso); return isNaN(d.getTime()) ? '' : d.toLocaleString('zh-CN', { hour12: false }); }
+
+  /* ---------- 算术验证（纯前端，配蜜罐与限流一起用） ---------- */
+  var capAns = 0;
+  function newCaptcha() {
+    var a = 1 + Math.floor(Math.random() * 9), b = 1 + Math.floor(Math.random() * 9);
+    capAns = a + b;
+    capQ.textContent = '人机验证：' + a + ' + ' + b + ' = ?';
+    capA.value = '';
+  }
+  newCaptcha();
+
+  /* ---------- 本机限流 ---------- */
+  function hits() {
+    try {
+      var raw = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+      var now = Date.now();
+      return raw.filter(function (t) { return now - t < LIMIT_WINDOW; });
+    } catch (e) { return []; }
+  }
+  function stamp() {
+    var h = hits(); h.push(Date.now());
+    try { localStorage.setItem(LS_KEY, JSON.stringify(h)); } catch (e) {}
+  }
+  function cooldownLeft() {
+    var h = hits();
+    if (h.length < LIMIT_MAX) return 0;
+    return Math.max(0, LIMIT_WINDOW - (Date.now() - h[0]));
+  }
+  function mmss(ms) {
+    var m = Math.ceil(ms / 60000);
+    return m >= 60 ? Math.floor(m / 60) + ' 小时 ' + (m % 60) + ' 分' : m + ' 分钟';
   }
 
-  function esc(s) {
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  /* ---------- 弹窗 ---------- */
+  function openModal(el) {
+    el.classList.add('open');
+    el.querySelector('.modal-x').focus();
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(el) {
+    el.classList.remove('open');
+    document.body.style.overflow = '';
+    if (el === modalWarn) textEl.focus();
+  }
+  var modal = document.getElementById('modal');
+  var modalWarn = document.getElementById('modal-warn');
+  function wireClose(el) {
+    el.querySelector('.modal-x').addEventListener('click', function () { closeModal(el); });
+    el.querySelector('.modal-ok').addEventListener('click', function () { closeModal(el); });
+    el.addEventListener('click', function (e) { if (e.target === el) closeModal(el); });
+  }
+  wireClose(modal); wireClose(modalWarn);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closeModal(modal); closeModal(modalWarn); }
+  });
+  function warn(title, body, meta) {
+    document.getElementById('mw-title').textContent = title;
+    document.getElementById('mw-body').textContent = body;
+    document.getElementById('mw-meta').textContent = meta || 'RATE LIMIT';
+    openModal(modalWarn);
   }
 
-  /* 敏感词/广告过滤（与旧版一致，拦截在前端，RLS 兜底长度与频率） */
+  /* ---------- 弹幕 ---------- */
+  var lanes = 8, laneBusy = {};
+  function lane() {
+    var now = Date.now();
+    for (var i = 0; i < lanes; i++) {
+      if (!laneBusy[i] || now - laneBusy[i] > 10000) { laneBusy[i] = now; return i; }
+    }
+    var j = Math.floor(Math.random() * lanes);
+    laneBusy[j] = now;
+    return j;
+  }
+  function fly(item, fresh) {
+    var el = document.createElement('div');
+    el.className = 'br-item';
+    el.style.top = (12 + lane() * (340 - 40) / lanes) + 'px';
+    var dur = 16 + Math.random() * 10;
+    el.style.animationDuration = dur + 's';
+    el.innerHTML = '<span class="who">' + esc(item.name) + '</span>' +
+                   esc(item.content.length > 34 ? item.content.slice(0, 34) + '…' : item.content);
+    el.title = '点击查看全文';
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    function open() {
+      document.getElementById('md-title').textContent = item.name;
+      document.getElementById('md-meta').textContent = fmt(item.created_at);
+      document.getElementById('md-body').textContent = item.content;
+      openModal(modal);
+    }
+    el.addEventListener('click', open);
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    });
+    el.addEventListener('animationend', function () { el.remove(); });
+    stage.appendChild(el);
+    if (fresh) setTimeout(function () { el.style.left = '-10%'; }, 30);
+    return el;
+  }
+  toggle.addEventListener('click', function () {
+    var paused = stage.classList.toggle('paused');
+    toggle.textContent = paused ? '继续' : '暂停';
+    toggle.setAttribute('aria-pressed', paused ? 'true' : 'false');
+  });
+
+  /* ---------- 敏感词过滤 ---------- */
   function autoFilter(name, content) {
     var t = (name + ' ' + content).toLowerCase();
     var BLOCK = ['代开发','加微信','加v','兼职','刷单','博彩','赌博','贷款','办证','发票','外挂','sf','私服','广告'];
-    for (var i = 0; i < BLOCK.length; i++) {
-      if (t.indexOf(BLOCK[i]) !== -1) return '内容包含敏感词，已拦截';
-    }
+    for (var i = 0; i < BLOCK.length; i++) if (t.indexOf(BLOCK[i]) !== -1) return '内容包含敏感词，已拦截';
     if (/https?:\/\/|www\./i.test(t)) return '留言里不放链接';
     return null;
   }
 
-  function render(rows) {
-    if (!rows || !rows.length) {
-      box.innerHTML = '<p class="gbempty">还没有留言，沙发等你来抢。</p>';
-      return;
-    }
-    box.innerHTML = rows.map(function (r) {
-      var d = new Date(r.created_at);
-      var t = isNaN(d.getTime()) ? '' : d.toLocaleString('zh-CN', { hour12: false });
-      return '<div class="msg"><p class="msg-h"><b>' + esc(r.name) + '</b>' +
-             '<time>' + esc(t) + '</time></p><p>' + esc(r.content) + '</p></div>';
-    }).join('');
-  }
-
-  function status(msg) {
-    var el = document.querySelector('.gbnote');
-    if (msg) { el.dataset.flash = '1'; el.textContent = msg; }
-  }
-
-  /* 读 */
+  /* ---------- 读 ---------- */
   fetch(SB_URL + '/rest/v1/messages?select=name,content,created_at&status=eq.approved&order=created_at.desc&limit=50',
         { headers: headers() })
     .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(render)
+    .then(function (rows) {
+      countEl.textContent = (rows.length || 0) + ' 条留言';
+      if (!rows.length) {
+        stage.innerHTML = '<p class="gbempty" style="padding:20px">还没有留言，第一条弹幕归你。</p>';
+        return;
+      }
+      rows.slice().reverse().forEach(function (r, i) {
+        setTimeout(function () { fly(r, false); }, i * 900);
+      });
+    })
     .catch(function () {
-      box.innerHTML = '<p class="gbempty">留言加载失败——可能数据库还没建好，稍后再来看看。</p>';
+      stage.innerHTML = '<p class="gbempty" style="padding:20px">留言加载失败——稍后再来看看。</p>';
     });
 
-  /* 写 */
+  /* ---------- 写 ---------- */
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var name = nameEl.value.trim();
     var content = textEl.value.trim();
     if (!name || !content) return;
-    var blocked = autoFilter(name, content);
-    if (blocked) {
-      document.querySelector('.gbnote').textContent = blocked;
+
+    /* 闸门 1：蜜罐 */
+    if (honeypot && honeypot.value) { newCaptcha(); return; }
+    /* 闸门 2：人机验证 */
+    if (parseInt(capA.value, 10) !== capAns) {
+      note.textContent = '算错了，验证题换一道。';
+      newCaptcha();
       return;
     }
+    /* 闸门 3：本机限流 */
+    var left = cooldownLeft();
+    if (left > 0) {
+      warn('发得太快了',
+           '一小时内最多发 ' + LIMIT_MAX + ' 条，你已经发满了。再等 ' + mmss(left) + ' 就好。',
+           'LOCAL RATE LIMIT');
+      newCaptcha();
+      return;
+    }
+    var bad = autoFilter(name, content);
+    if (bad) { note.textContent = bad; newCaptcha(); return; }
+
     var btn = form.querySelector('.gbsend');
     btn.disabled = true;
     fetch(SB_URL + '/rest/v1/messages', {
@@ -471,30 +674,45 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
     }).then(function (r) {
       btn.disabled = false;
       if (r.status === 201 || r.status === 200) {
-        // 乐观插入：把新留言顶到列表最前
-        var list = box.querySelectorAll('.msg');
-        var div = document.createElement('div');
-        div.className = 'msg';
-        var d = new Date();
-        div.innerHTML = '<p class="msg-h"><b>' + esc(name) + '</b><time>' +
-          esc(d.toLocaleString('zh-CN', { hour12: false })) + '</time></p><p>' + esc(content) + '</p>';
-        if (list.length) box.insertBefore(div, list[0]);
-        else box.innerHTML = '', box.appendChild(div);
-        var empty = box.querySelector('.gbempty');
-        if (empty) empty.remove();
+        stamp();
+        fly({ name: name, content: content, created_at: new Date().toISOString() }, true);
+        var n = parseInt(countEl.textContent, 10) || 0;
+        countEl.textContent = (n + 1) + ' 条留言';
         nameEl.value = ''; textEl.value = '';
-        document.querySelector('.gbnote').textContent = '发出去了，刷新也不丢。';
-      } else if (r.status === 412 || r.status === 400) {
-        // RLS 拦截：大概率触发了限流
-        document.querySelector('.gbnote').textContent = '发得太快啦，歇一分钟再来。';
+        note.textContent = '飘出去了。点弹幕可以看全文。';
+        newCaptcha();
+      } else if (r.status === 401 || r.status === 403 || r.status === 412 || r.status === 400) {
+        warn('数据库挡下来了',
+             '全站每分钟最多 10 条留言，或者内容长度不合规。歇一会儿再试。',
+             'SERVER RATE LIMIT');
+        newCaptcha();
       } else {
-        document.querySelector('.gbnote').textContent = '发送失败（HTTP ' + r.status + '），稍后再试。';
+        note.textContent = '发送失败（HTTP ' + r.status + '），稍后再试。';
+        newCaptcha();
       }
     }).catch(function () {
       btn.disabled = false;
-      document.querySelector('.gbnote').textContent = '网络问题，没发出去，再试一次。';
+      note.textContent = '网络问题，没发出去，再试一次。';
     });
   });
+
+  /* ---------- 章节墙视差：随滚动漂移 ---------- */
+  var wall = document.getElementById('wall');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (wall && !reduce) {
+    var ticking = false;
+    function move() {
+      var y = window.pageYOffset || document.documentElement.scrollTop;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var r = max > 0 ? Math.min(1, y / max) : 0;
+      wall.style.transform = 'translate3d(0,' + (-r * 260).toFixed(1) + 'px,0)';
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(move); }
+    }, { passive: true });
+    move();
+  }
 })();
 </script>
 </body>
