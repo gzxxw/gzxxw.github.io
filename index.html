@@ -147,9 +147,37 @@ h1 .sig{color:var(--signal)}
   padding:3px 10px;min-height:32px}
 .br-hint button:hover{background:#fff;color:#000}
 /* 验证行 */
-.captcha{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
-.captcha .q{font-family:var(--mono);font-size:13px;color:var(--black)}
-.captcha input{width:64px;padding:7px 8px;font-size:14px}
+/* 滑块人机验证：工业尺风格 */
+.captcha{margin-top:10px}
+.cap-label{display:block;font-family:var(--mono);font-size:12px;margin-bottom:6px}
+.cap-track{position:relative;height:44px;border:1px solid var(--black);background:var(--white);
+  overflow:hidden;user-select:none;
+  background-image:repeating-linear-gradient(90deg,var(--black) 0 1px,transparent 1px 10%);
+  background-size:100% 8px;background-position:0 100%;background-repeat:no-repeat}
+.cap-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(0,0,0,.08)}
+.cap-target{position:absolute;top:0;bottom:0;width:3px;background:var(--signal);
+  left:70%;transition:left .15s}
+.cap-target::after{content:"";position:absolute;top:0;left:-4px;border:6px solid transparent;
+  border-top-color:var(--signal);border-bottom:0}
+.cap-knob{position:absolute;top:-1px;left:0;width:44px;height:44px;margin:0;padding:0;
+  background:var(--black);border:1px solid var(--black);color:var(--white);cursor:grab;
+  display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;
+  touch-action:none;z-index:2}
+.cap-knob:active{cursor:grabbing}
+.cap-knob:focus-visible{outline:3px solid var(--link);outline-offset:2px}
+.cap-knob::before{content:"";width:10px;height:18px;
+  background:repeating-linear-gradient(90deg,var(--white) 0 2px,transparent 2px 5px)}
+.cap-hint{position:absolute;left:52px;top:50%;transform:translateY(-50%);
+  font-family:var(--mono);font-size:12px;color:var(--grey);pointer-events:none;
+  white-space:nowrap;z-index:1}
+.cap-track.ok{border-color:var(--black);background:var(--black)}
+.cap-track.ok .cap-hint{color:var(--white)}
+.cap-track.ok .cap-knob{background:var(--signal);border-color:var(--signal);cursor:default}
+.cap-track.ok .cap-fill,.cap-track.ok .cap-target{display:none}
+.cap-track.shake{animation:cshake .3s}
+@keyframes cshake{20%{transform:translateX(-6px)}40%{transform:translateX(5px)}
+  60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+@media (prefers-reduced-motion: reduce){.cap-track.shake{animation:none}}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 /* 弹窗 */
 .modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;
@@ -422,10 +450,14 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
       <textarea id="gb-text" maxlength="200" required
         placeholder="夸我损我都行…"></textarea>
       <div class="captcha">
-        <span class="q" id="cap-q">算一下：? + ? = ?</span>
-        <label class="hp" for="cap-a">答案</label>
-        <input id="cap-a" type="text" inputmode="numeric" autocomplete="off"
-          placeholder="答案">
+        <span class="cap-label">人机验证 · 把滑块拖到 <b style="color:var(--signal)">红线</b> 上</span>
+        <div class="cap-track" id="cap-track">
+          <span class="cap-fill" id="cap-fill"></span>
+          <span class="cap-target" id="cap-target"></span>
+          <span class="cap-hint" id="cap-hint">按住拖动 →</span>
+          <button type="button" class="cap-knob" id="cap-knob"
+            aria-label="人机验证滑块：按住拖到红线处，或用左右方向键微调后回车确认"></button>
+        </div>
       </div>
       <button class="gbsend" type="submit">发送</button>
       <p class="gbnote" id="gb-note">留言会变成弹幕飘过整屏，点它就能看全文。</p>
@@ -500,8 +532,11 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
   var stage = document.getElementById('barrage');
   var toggle = document.getElementById('br-toggle');
   var countEl = document.getElementById('br-count');
-  var capQ = document.getElementById('cap-q');
-  var capA = document.getElementById('cap-a');
+  var capTrack = document.getElementById('cap-track');
+  var capKnob = document.getElementById('cap-knob');
+  var capTarget = document.getElementById('cap-target');
+  var capFill = document.getElementById('cap-fill');
+  var capHint = document.getElementById('cap-hint');
   var honeypot = document.getElementById('gb-web');
 
   /* ---------- 工具 ---------- */
@@ -509,14 +544,91 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
   function esc(v) { return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function fmt(iso) { var d = new Date(iso); return isNaN(d.getTime()) ? '' : d.toLocaleString('zh-CN', { hour12: false }); }
 
-  /* ---------- 算术验证（纯前端，配蜜罐与限流一起用） ---------- */
-  var capAns = 0;
+  /* ---------- 滑块人机验证 ----------
+     红线随机位置（15%-90%），拖到 ±4% 内算过；
+     另做轨迹检测：真人拖动有中间位移和耗时，
+     脚本直接 set left / 瞬移会被拒。键盘走方向键也算真人路径。 */
+  var capTargetPct = 0, capPassed = false, capDragging = false;
+  var capSamples = [], capStartT = 0, capKeyboard = false;
+
   function newCaptcha() {
-    var a = 1 + Math.floor(Math.random() * 9), b = 1 + Math.floor(Math.random() * 9);
-    capAns = a + b;
-    capQ.textContent = '人机验证：' + a + ' + ' + b + ' = ?';
-    capA.value = '';
+    capPassed = false; capKeyboard = false;
+    capSamples = [];
+    capTrack.classList.remove('ok', 'shake');
+    capKnob.style.left = '0px';
+    capFill.style.width = '0px';
+    capHint.textContent = '按住拖动 →';
+    capTargetPct = 15 + Math.random() * 75;            // 15% ~ 90%
+    capTarget.style.left = capTargetPct + '%';
+    capKnob.setAttribute('aria-invalid', 'false');
   }
+
+  function knobX() { return parseFloat(capKnob.style.left) || 0; }
+  function trackW() { return capTrack.clientWidth - capKnob.offsetWidth; }
+  function setKnob(px) {
+    var w = trackW();
+    px = Math.max(0, Math.min(w, px));
+    capKnob.style.left = px + 'px';
+    capFill.style.width = (px + capKnob.offsetWidth / 2) + 'px';
+  }
+
+  function evaluate() {
+    if (capPassed) return;
+    var w = trackW();
+    var knobPct = w > 0 ? (parseFloat(capKnob.style.left) + capKnob.offsetWidth / 2) / capTrack.clientWidth * 100 : 0;
+    var near = Math.abs(knobPct - capTargetPct) <= 4;
+    // 轨迹检测：非键盘路径要求有 >=4 个中间采样点（防瞬移脚本）
+    var human = capKeyboard || capSamples.length >= 4;
+    if (near && human) {
+      capPassed = true;
+      capTrack.classList.add('ok');
+      capHint.textContent = '验证通过 ✓';
+      capKnob.setAttribute('aria-invalid', 'false');
+      note.textContent = '验证过了，点发送就行。';
+    } else {
+      capTrack.classList.add('shake');
+      capKnob.setAttribute('aria-invalid', 'true');
+      note.textContent = near ? '位置对了，但拖得太快——重新慢慢拖一次。' : '没对准红线，再试一次。';
+      setTimeout(function () { newCaptcha(); }, 450);
+    }
+  }
+
+  capKnob.addEventListener('pointerdown', function (e) {
+    if (capPassed) return;
+    capDragging = true; capKeyboard = false;
+    capStartT = Date.now();
+    capSamples = [];
+    capKnob.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  capKnob.addEventListener('pointermove', function (e) {
+    if (!capDragging || capPassed) return;
+    var rect = capTrack.getBoundingClientRect();
+    var px = e.clientX - rect.left - capKnob.offsetWidth / 2;
+    setKnob(px);
+    capSamples.push({ x: px, t: Date.now() });
+    if (capSamples.length > 30) capSamples.shift();
+  });
+  function endDrag() {
+    if (!capDragging || capPassed) return;
+    capDragging = false;
+    evaluate();
+  }
+  capKnob.addEventListener('pointerup', endDrag);
+  capKnob.addEventListener('pointercancel', endDrag);
+
+  /* 键盘无障碍路径：方向键移动，回车提交 */
+  capKnob.addEventListener('keydown', function (e) {
+    if (capPassed) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      if (!capKeyboard) { capKeyboard = true; capSamples = []; }
+      setKnob(knobX() + (e.key === 'ArrowRight' ? 12 : -12));
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      evaluate();
+    }
+  });
   newCaptcha();
 
   /* ---------- 本机限流 ---------- */
@@ -649,10 +761,11 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
 
     /* 闸门 1：蜜罐 */
     if (honeypot && honeypot.value) { newCaptcha(); return; }
-    /* 闸门 2：人机验证 */
-    if (parseInt(capA.value, 10) !== capAns) {
-      note.textContent = '算错了，验证题换一道。';
-      newCaptcha();
+    /* 闸门 2：滑块人机验证 */
+    if (!capPassed) {
+      note.textContent = '先把滑块拖到红线上完成验证。';
+      capTrack.classList.add('shake');
+      setTimeout(function () { capTrack.classList.remove('shake'); }, 400);
       return;
     }
     /* 闸门 3：本机限流 */
