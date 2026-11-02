@@ -55,8 +55,8 @@ section{border-top:1px solid var(--black)}
 
 /* ---- 首屏 ---- */
 .hero{border-bottom:1px solid var(--black)}
-/* 章节墙：固定层，贯穿整站，随滚动视差漂移 */
-.wall{position:fixed;left:0;right:0;top:-25%;height:150%;z-index:0;
+/* 章节墙：铺满整页高度的背景层，滚动时以 0.5 倍速反向流动（真实视差） */
+.wall{position:absolute;left:0;right:0;top:0;z-index:0;min-height:100vh;
   display:flex;flex-wrap:wrap;align-content:flex-start;gap:0 18px;padding:20px 32px;
   font-family:var(--mono);font-size:13px;line-height:2.1;color:var(--black);
   opacity:.13;user-select:none;pointer-events:none;overflow:hidden;
@@ -65,6 +65,7 @@ section{border-top:1px solid var(--black)}
 /* 内容层抬到墙之上 */
 main,footer{position:relative;z-index:1}
 section{background:transparent}
+body{position:relative}
 .hero-in{position:relative;padding:88px 0 72px}
 .kicker{font-family:var(--mono);font-size:13px;letter-spacing:.02em;margin-bottom:18px}
 .kicker b{background:var(--signal);color:var(--white);padding:2px 8px;font-weight:700}
@@ -125,7 +126,7 @@ h1 .sig{color:var(--signal)}
 
 /* ---- 留言 ---- */
 .gb{display:grid;grid-template-columns:5fr 7fr;border-bottom:1px solid var(--black)}
-.gbform{padding:36px 32px;border-right:1px solid var(--black)}
+.gbform{padding:20px 18px;border-right:1px solid var(--black)}
 .gblist{padding:36px 32px;position:relative}
 /* 弹幕舞台 */
 .barrage{position:relative;height:360px;border:1px solid var(--black);overflow:hidden;
@@ -146,9 +147,9 @@ h1 .sig{color:var(--signal)}
   padding:3px 10px;min-height:32px}
 .br-hint button:hover{background:#fff;color:#000}
 /* 验证行 */
-.captcha{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
-.captcha .q{font-family:var(--mono);font-size:15px;color:var(--black)}
-.captcha input{width:88px;padding:10px;font-size:15px}
+.captcha{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.captcha .q{font-family:var(--mono);font-size:13px;color:var(--black)}
+.captcha input{width:64px;padding:7px 8px;font-size:14px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 /* 弹窗 */
 .modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;
@@ -166,17 +167,18 @@ h1 .sig{color:var(--signal)}
   background:var(--black);color:var(--white);border:1px solid var(--black);font-family:var(--font);
   font-size:15px;font-weight:700;cursor:pointer}
 .modal-ok:hover{background:var(--signal)}
-label{display:block;font-family:var(--mono);font-size:13px;margin-bottom:10px}
+label{display:block;font-family:var(--mono);font-size:12px;margin-bottom:5px}
 textarea,input[type=text]{width:100%;border:1px solid var(--black);border-radius:0;
-  padding:14px;font-family:var(--font);font-size:15px;background:var(--white);color:var(--black)}
-textarea{min-height:150px;resize:vertical}
+  padding:8px 10px;font-family:var(--font);font-size:14px;background:var(--white);color:var(--black)}
+textarea{min-height:64px;resize:vertical;line-height:1.5}
 textarea:focus,input[type=text]:focus{outline:3px solid var(--link);outline-offset:-1px}
-.gbform input[type=text]{margin-bottom:14px}
-.gbsend{display:inline-flex;align-items:center;min-height:52px;margin-top:16px;
-  padding:0 30px;background:var(--black);color:var(--white);border:1px solid var(--black);
-  font-family:var(--font);font-size:16px;font-weight:700;cursor:pointer}
+.gbform input[type=text]{margin-bottom:10px}
+.gbform label[for=gb-text]{margin-top:2px}
+.gbsend{display:inline-flex;align-items:center;min-height:44px;margin-top:12px;
+  padding:0 22px;background:var(--black);color:var(--white);border:1px solid var(--black);
+  font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer}
 .gbsend:hover{background:var(--link);border-color:var(--link)}
-.gbnote{font-size:13.5px;color:#444;margin-top:12px;line-height:1.6}
+.gbnote{font-size:12.5px;color:#444;margin-top:8px;line-height:1.5}
 .msg{padding:14px 0;border-bottom:1px solid var(--black)}
 .msg-h{display:flex;justify-content:space-between;font-family:var(--mono);
   font-size:12px;margin-bottom:5px}
@@ -696,22 +698,34 @@ footer{background:var(--black);color:var(--white);padding:34px 0}
     });
   });
 
-  /* ---------- 章节墙视差：随滚动漂移 ---------- */
+  /* ---------- 章节墙真实视差：滚动时以 0.5 倍速反向流动 ---------- */
   var wall = document.getElementById('wall');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (wall) {
+    var seed = wall.innerHTML;
+    wall.innerHTML = seed + seed + seed;   // 铺满长页，滚动到任何位置都有字
+  }
+  function sizeWall() {
+    if (!wall) return;
+    // 墙需要覆盖：滚动到底时 (pageH - scrollY*0.5) 仍在视口内
+    wall.style.height = (document.documentElement.scrollHeight * 0.55 + window.innerHeight * 1.2) + 'px';
+  }
   if (wall && !reduce) {
     var ticking = false;
     function move() {
       var y = window.pageYOffset || document.documentElement.scrollTop;
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      var r = max > 0 ? Math.min(1, y / max) : 0;
-      wall.style.transform = 'translate3d(0,' + (-r * 260).toFixed(1) + 'px,0)';
+      wall.style.transform = 'translate3d(0,' + (-y * 0.5).toFixed(1) + 'px,0)';
       ticking = false;
     }
     window.addEventListener('scroll', function () {
       if (!ticking) { ticking = true; requestAnimationFrame(move); }
     }, { passive: true });
-    move();
+    window.addEventListener('resize', function () { sizeWall(); move(); });
+    sizeWall(); move();
+    // 弹幕/留言增删会改变页高，兜底重算
+    setInterval(sizeWall, 4000);
+  } else if (wall) {
+    sizeWall();
   }
 })();
 </script>
