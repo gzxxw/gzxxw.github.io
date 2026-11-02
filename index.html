@@ -1,179 +1,390 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lim | 高中生的极客小站</title>
-  <meta name="description" content="Lim，高一学生。喜欢原神和崩坏：星穹铁道，研究 AI，写点解决自己问题的小工具。这里放着我的作品、爱好和一些想法。">
-  <meta name="author" content="Lim">
-  <meta name="theme-color" content="#0a0a0a">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Lim | 高中生的极客小站">
-  <meta property="og:description" content="高一学生，玩原神和星穹铁道，研究 AI，写点小工具。作品与爱好都在这里。">
-  <meta property="og:url" content="https://gzxxw.github.io/">
-  <link rel="canonical" href="https://gzxxw.github.io/">
-  <!-- favicon：品牌蓝终端风 SVG -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236799FE'/%3E%3Cpath d='M14 20l12 12-12 12' stroke='%230a0a0a' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Crect x='32' y='40' width='18' height='6' rx='3' fill='%230a0a0a'/%3E%3C/svg%3E">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lim — 高中数学刷题本 · 江油中学镜像站</title>
+<meta name="description" content="Lim，高一在读。两个已上线的作品：200 章高中数学刷题本，306 文件的学校官网静态镜像。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lim — 我做出来两个东西，现在就能点开">
+<meta property="og:description" content="200 章高中数学刷题本 + 306 文件学校官网静态镜像，都是已上线的真实产品。">
+<meta property="og:url" content="https://gzxxw.github.io/">
+<link rel="canonical" href="https://gzxxw.github.io/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000'/%3E%3Crect x='8' y='8' width='20' height='20' fill='%23FF433D'/%3E%3Ccircle cx='44' cy='18' r='10' fill='%23FFF'/%3E%3Cpath d='M10 54 24 30 38 54z' fill='%23FFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.2.5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.2.5/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.2.5/900.css">
+<style>
+/* ============================================================
+   Lim 个人站 · 媒体级粗野主义（Businessweek / Turley 谱系）
+   纯黑 + 纯白 + 链接蓝 #0000EE + 信号橙红 #FF433D。
+   锐角、规则线、高密度。form 来自内容：
+   200 个真实章节名排成文字墙做版面底纹。
+   ============================================================ */
+:root{
+  --black:#000; --white:#FFF; --link:#0000EE; --signal:#FF433D;
+  --grey:#888;
+  --font:"Inter","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --mono:"Geist Mono","JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--white);color:var(--black);
+  font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+::selection{background:var(--signal);color:var(--white)}
+a{color:var(--link);text-decoration:underline;text-underline-offset:2px}
+a:hover{background:var(--link);color:var(--white)}
+.wrap{max-width:1440px;margin:0 auto;padding:0 32px}
+section{border-top:1px solid var(--black)}
 
-  <!-- 字体：Host Grotesk（标题）+ DM Sans（正文）+ Fragment Mono（代码），jsDelivr 国内可用 -->
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/host-grotesk@5.3.0/600.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/host-grotesk@5.3.0/700.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@5.3.0/400.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@5.3.0/500.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@5.3.0/600.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fragment-mono@5.3.0/400.css">
+/* ---- 导航：一行报纸刊头 ---- */
+.topbar{border-bottom:1px solid var(--black);background:var(--white);
+  position:sticky;top:0;z-index:50}
+.topbar-in{display:flex;align-items:stretch;height:52px}
+.brand{font-weight:900;font-size:22px;letter-spacing:-.04em;display:flex;
+  align-items:center;padding-right:24px;border-right:1px solid var(--black);
+  color:var(--black);text-decoration:none}
+.brand em{font-style:normal;color:var(--signal)}
+.topnav{display:flex;align-items:stretch;flex:1}
+.topnav a{display:flex;align-items:center;padding:0 22px;border-right:1px solid var(--black);
+  color:var(--black);text-decoration:none;font-size:14px;font-weight:700}
+.topnav a:hover{background:var(--black);color:var(--white)}
+.topdate{margin-left:auto;display:flex;align-items:center;padding-left:22px;
+  font-family:var(--mono);font-size:12px;color:var(--grey);white-space:nowrap}
 
-  <!-- 图标：全部内联本地 SVG（mask 方式），零第三方图标请求 -->
+/* ---- 首屏：章节名文字墙压巨号标题 ---- */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--black)}
+.wall{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:flex-start;
+  gap:0 18px;padding:20px 32px;font-family:var(--mono);font-size:13px;line-height:2.1;
+  color:var(--black);opacity:.16;user-select:none;pointer-events:none;overflow:hidden}
+.wall span{white-space:nowrap}
+.hero-in{position:relative;padding:88px 0 72px}
+.kicker{font-family:var(--mono);font-size:13px;letter-spacing:.02em;margin-bottom:18px}
+.kicker b{background:var(--signal);color:var(--white);padding:2px 8px;font-weight:700}
+h1{font-size:clamp(64px,9vw,132px);font-weight:900;letter-spacing:-.05em;
+  line-height:.96;margin:0 0 26px}
+h1 .sig{color:var(--signal)}
+.standfirst{max-width:52ch;font-size:16px;line-height:1.65;border-top:3px solid var(--black);
+  padding-top:16px}
+.standfirst b{background:var(--black);color:var(--white);padding:0 6px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:0;margin-top:34px;border:1px solid var(--black)}
+.cta-a{display:flex;align-items:center;min-height:56px;padding:0 30px;
+  font-size:16px;font-weight:700;color:var(--black);text-decoration:none;
+  border-right:1px solid var(--black)}
+.cta-a:last-child{border-right:0}
+.cta-a:hover{background:var(--black);color:var(--white)}
+.cta-a.pri{background:var(--black);color:var(--white)}
+.cta-a.pri:hover{background:var(--signal)}
 
-  <!-- 动效：AOS（滚动出现）+ Animate.css（hover 小动画） -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+/* ---- 通用板块头 ---- */
+.sechead{display:flex;align-items:baseline;gap:20px;padding:26px 0 22px;
+  border-bottom:1px solid var(--black)}
+.sechead h2{font-size:clamp(30px,3.4vw,48px);font-weight:900;letter-spacing:-.03em}
+.sechead .no{font-family:var(--mono);font-size:13px;color:var(--grey)}
 
-  <link rel="stylesheet" href="css/style.css?v=20260927">
+/* ---- 作品：报版模块网格 ---- */
+.works{display:grid;grid-template-columns:7fr 5fr;border-bottom:1px solid var(--black)}
+.works.rev{grid-template-columns:5fr 7fr}
+.wmain{padding:40px 36px;border-right:1px solid var(--black)}
+.works.rev .wmain{border-right:0;border-left:1px solid var(--black)}
+.wside{padding:40px 32px;background:var(--black);color:var(--white)}
+.wmain h3{font-size:clamp(30px,2.8vw,44px);font-weight:900;letter-spacing:-.03em;
+  margin-bottom:10px}
+.wmain .cat{font-family:var(--mono);font-size:13px;margin-bottom:22px}
+.wmain .cat i{font-style:normal;background:var(--signal);color:var(--white);padding:2px 8px}
+.wmain p{font-size:15px;line-height:1.7;max-width:56ch;margin-bottom:12px}
+.wmain p b{background:var(--signal);color:var(--white);padding:0 5px}
+.golink{display:inline-flex;align-items:center;min-height:52px;margin-top:16px;
+  padding:0 26px;background:var(--black);color:var(--white);text-decoration:none;
+  font-weight:700;font-size:16px}
+.golink:hover{background:var(--link)}
+.wside h4{font-family:var(--mono);font-size:13px;font-weight:400;color:#bbb;
+  margin-bottom:18px}
+.spec{list-style:none}
+.spec li{display:flex;justify-content:space-between;gap:14px;padding:11px 0;
+  border-bottom:1px solid #333;font-size:14.5px}
+.spec li:last-child{border-bottom:0}
+.spec b{font-family:var(--mono);font-weight:700;color:var(--white);text-align:right}
+.spec .hi{color:var(--signal)}
+.demo{border:1px solid #444;padding:14px 14px 10px;margin-top:22px}
+.demo-tag{font-family:var(--mono);font-size:12px;color:#888;margin-bottom:8px}
+.q{font-size:15px;line-height:1.6;color:var(--white)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.opts span{font-family:var(--mono);font-size:13px;padding:6px 9px;border:1px solid #444;
+  color:#ccc}
+.opts .ok{border-color:var(--signal);color:var(--white);background:#1c1c1c}
+.ana{font-size:13px;line-height:1.6;color:#999;margin-top:10px;border-top:1px dashed #444;
+  padding-top:8px}
+
+/* ---- 爱好：低层信息，紧凑列表 ---- */
+.plays{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--black)}
+.play{padding:26px 24px;border-right:1px solid var(--black)}
+.play:last-child{border-right:0}
+.play h3{font-size:19px;font-weight:900;margin-bottom:6px}
+.play p{font-size:14px;color:#444;line-height:1.6}
+.play .uid{font-family:var(--mono);font-size:12px;color:var(--grey);margin-top:10px}
+
+/* ---- 留言 ---- */
+.gb{display:grid;grid-template-columns:5fr 7fr;border-bottom:1px solid var(--black)}
+.gbform{padding:36px 32px;border-right:1px solid var(--black)}
+.gblist{padding:36px 32px}
+label{display:block;font-family:var(--mono);font-size:13px;margin-bottom:10px}
+textarea{width:100%;min-height:150px;border:1px solid var(--black);border-radius:0;
+  padding:14px;font-family:var(--font);font-size:15px;resize:vertical;background:var(--white)}
+textarea:focus{outline:3px solid var(--link);outline-offset:-1px}
+.gbsend{display:inline-flex;align-items:center;min-height:52px;margin-top:16px;
+  padding:0 30px;background:var(--black);color:var(--white);border:1px solid var(--black);
+  font-family:var(--font);font-size:16px;font-weight:700;cursor:pointer}
+.gbsend:hover{background:var(--link);border-color:var(--link)}
+.gbnote{font-size:13.5px;color:#444;margin-top:12px;line-height:1.6}
+.msg{padding:14px 0;border-bottom:1px solid var(--black)}
+.msg-h{display:flex;justify-content:space-between;font-family:var(--mono);
+  font-size:12px;margin-bottom:5px}
+.msg-h b{color:var(--black)}
+.msg-h time{color:var(--grey)}
+.msg p{font-size:14.5px}
+.gbempty{color:var(--grey);padding:20px 0}
+
+/* ---- 页脚 ---- */
+footer{background:var(--black);color:var(--white);padding:34px 0}
+.foot{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;
+  align-items:baseline}
+.foot .motto{font-weight:900;font-size:20px;letter-spacing:-.02em}
+.foot .motto em{font-style:normal;color:var(--signal)}
+.foot a{color:var(--white)}
+.foot .fine{font-family:var(--mono);font-size:12px;color:#999}
+
+/* ---- 入场：一次编排（reduced-motion 用户直出） ---- */
+@media (prefers-reduced-motion: no-preference){
+  .hero-in>*{opacity:0;animation:rise .5s cubic-bezier(.2,.7,.3,1) forwards}
+  .hero-in .kicker{animation-delay:.05s}
+  .hero-in h1{animation-delay:.15s}
+  .hero-in .standfirst{animation-delay:.3s}
+  .hero-in .hero-cta{animation-delay:.42s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+}
+
+/* ---- 响应式 ---- */
+@media(max-width:900px){
+  .works,.works.rev,.gb,.plays{grid-template-columns:1fr}
+  .wmain{border-right:0!important;border-left:0!important;border-bottom:1px solid var(--black)}
+  .works.rev .wmain{border-left:0}
+  .play{border-right:0;border-bottom:1px solid var(--black)}
+  .topdate{display:none}
+}
+@media(max-width:640px){
+  .wrap{padding:0 18px}
+  body{font-size:16px}
+  .hero-in{padding:56px 0 48px}
+  .topnav a{padding:0 12px;font-size:13px}
+  .brand{padding-right:12px}
+  .wmain,.wside,.gbform,.gblist{padding:26px 18px}
+  .opts{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 
-  <!-- 顶部导航 -->
-  <header class="nav">
-    <div class="nav-inner">
-      <a class="nav-logo" href="#top"><i class="icon-terminal nav-logo-ico" aria-hidden="true"></i>Lim</a>
-      <nav class="nav-links">
-        <a href="#works">作品</a>
-        <a href="#about">爱好</a>
-        <a href="#guestbook">留言</a>
-      </nav>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="#top">LIM<em>.</em></a>
+    <nav class="topnav" aria-label="主导航">
+      <a href="#work">作品</a>
+      <a href="#play">爱好</a>
+      <a href="#guest">留言</a>
+    </nav>
+    <span class="topdate">GITHUB PAGES · STATIC</span>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- 首屏 -->
+<section class="hero" aria-label="介绍">
+  <div class="wall" aria-hidden="true">
+    <span>等式变形</span><span>不等式解法</span><span>集合概念</span><span>子集概念</span>
+    <span>交并补运算</span><span>集合综合大题练习</span><span>集合易错大盘点</span>
+    <span>集合新定义问题</span><span>充分必要条件</span><span>全称与存在量词</span>
+    <span>不等式的性质</span><span>基本不等式</span><span>基本不等式进阶</span>
+    <span>二次函数的a、b、c、Δ和韦达</span><span>二次函数图像分布问题</span>
+    <span>引课: 高中为什么用f(x)</span><span>函数概念+定义域</span><span>函数解析式求法</span>
+    <span>分式函数的值域</span><span>函数单调性</span><span>函数奇偶性</span>
+    <span>单调奇偶性复习</span><span>单调奇偶性拓展</span><span>抽象</span><span>恒成立</span>
+    <span>双函数题</span><span>幂函数</span><span>分数指数幂的计算</span><span>指数函数</span>
+    <span>对数定义+基本运算规则</span><span>对数换底公式+练习</span><span>对数函数</span>
+    <span>初等函数知识串讲</span><span>指数、对数大小比较题型</span>
+    <span>初等函数图像与性质考点解析</span><span>指数、对数的增长力量</span>
+    <span>同底问题的解题思路总结</span><span>零点存在定理的应用</span>
+    <span>复合函数零点问题</span><span>分段函数最值思路</span><span>分段函数的零点问题</span>
+    <span>抽象函数零点判断</span><span>… 共 200 章</span>
+  </div>
+  <div class="wrap hero-in">
+    <p class="kicker"><b>已上线 ×2</b> 不是计划，不是作业</p>
+    <h1>我做出来两个东西，<span class="sig">现在就能点开</span>。</h1>
+    <p class="standfirst">Lim，高一在读。一个把高中数学拆成 <b>200 章</b>的刷题本，
+      一个在学校官网打不开时顶上来的<b>静态镜像</b>。都是纯前端，代码公开，就挂在这个域名下面。</p>
+    <div class="hero-cta">
+      <a class="cta-a pri" href="https://gzxxw.github.io/math" target="_blank" rel="noopener">打开刷题本</a>
+      <a class="cta-a" href="https://gzxxw.github.io/scsjyzx-mirror" target="_blank" rel="noopener">打开镜像站</a>
+      <a class="cta-a" href="https://github.com/gzxxw" target="_blank" rel="noopener">GitHub @gzxxw</a>
     </div>
-  </header>
+  </div>
+</section>
 
-  <main id="top">
-
-    <!-- 首屏 -->
-    <section class="hero">
-      <div class="hero-inner">
-        <span class="hero-badge" data-aos="fade-down">
-          <span class="hero-badge-dot"></span>Lim · 开发者预览版
-        </span>
-        <h1 class="hero-title" data-aos="fade-down" data-aos-delay="50">Lim</h1>
-        <p class="hero-sub" data-aos="fade-up" data-aos-delay="100">一切皆折腾 · 白天刷题，晚上搞机</p>
-        <p class="hero-desc" data-aos="fade-up" data-aos-delay="150">我是 Lim，高一学生。平时喜欢折腾点小工具，研究研究 AI，偶尔玩玩游戏。这里放了些我做的东西，欢迎随便看看。</p>
-
-        <!-- 终端窗口：Typed.js 打字机 -->
-        <div class="terminal" data-aos="fade-up" data-aos-delay="200" aria-hidden="true">
-          <div class="terminal-bar">
-            <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
-            <span class="terminal-title">lim@homepage: ~</span>
-            <span class="terminal-tag">bash</span>
-          </div>
-          <div class="terminal-body">
-            <p class="terminal-line"><span class="prompt">$</span> whoami</p>
-            <p class="terminal-line terminal-out">Lim · 高一在读 · 白天刷题，晚上搞机</p>
-            <p class="terminal-line"><span class="prompt">$</span> cat interests.txt</p>
-            <p class="terminal-line terminal-out"><span id="typed"></span></p>
-          </div>
-        </div>
-
-        <div class="hero-actions" data-aos="fade-up" data-aos-delay="300">
-          <a class="btn btn-primary" href="#works">看看我的作品 <i class="icon-arrow-down" aria-hidden="true"></i></a>
-          <a class="btn btn-secondary" href="https://github.com/gzxxw" target="_blank" rel="noopener noreferrer">GitHub @gzxxw</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- 作品卡片 -->
-    <section id="works" class="section">
-      <div class="container">
-        <h2 class="section-title" data-aos="fade-up">作品</h2>
-        <div class="card-grid">
-
-          <a class="card" href="https://gzxxw.github.io/math" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="0">
-            <div class="card-icon"><i class="icon-square-root-variable" aria-hidden="true"></i></div>
-            <h3 class="card-title">高中数学刷题本</h3>
-            <p class="card-desc">自己刷题用的小工具，带解析、错题本和云端同步。</p>
-            <div class="card-tags">
-              <span class="tag">工具</span>
-              <span class="tag">学习</span>
-              <span class="tag">自研</span>
-            </div>
-          </a>
-
-          <a class="card" href="https://gzxxw.github.io/scsjyzx-mirror" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="100">
-            <div class="card-icon"><i class="icon-school" aria-hidden="true"></i></div>
-            <h3 class="card-title">江油中学镜像站</h3>
-            <p class="card-desc">学校官网访问不畅时应急用的静态镜像，信息以官网为准。</p>
-            <div class="card-tags">
-              <span class="tag">公益</span>
-              <span class="tag">技术</span>
-            </div>
-          </a>
-
-          <a class="card" href="https://github.com/gzxxw" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="200">
-            <div class="card-icon"><i class="icon-github" aria-hidden="true"></i></div>
-            <h3 class="card-title">GitHub @gzxxw</h3>
-            <p class="card-desc">更多半成品和小实验都在这里，欢迎围观、提意见。</p>
-            <div class="card-tags">
-              <span class="tag">开源</span>
-              <span class="tag">持续更新</span>
-            </div>
-          </a>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- 爱好 / 技能 -->
-    <section id="about" class="section section-alt">
-      <div class="container">
-        <h2 class="section-title" data-aos="fade-up">爱好 / 技能</h2>
-        <ul class="hobby-list">
-          <li data-aos="fade-right" data-aos-delay="0">
-            <span class="hobby-ico"><i class="icon-gamepad" aria-hidden="true"></i></span>
-            <div><strong>原神</strong> — 提瓦特大陆观光团<span class="uid">UID 277743783</span></div>
-          </li>
-          <li data-aos="fade-right" data-aos-delay="100">
-            <span class="hobby-ico"><i class="icon-train-subway" aria-hidden="true"></i></span>
-            <div><strong>崩坏：星穹铁道</strong> — 开拓者上车了<span class="uid">UID 117119074</span></div>
-          </li>
-          <li data-aos="fade-right" data-aos-delay="200">
-            <span class="hobby-ico"><i class="icon-robot" aria-hidden="true"></i></span>
-            <div><strong>操纵 AI</strong> — 研究怎么让 AI 干活，而不是被 AI 干</div>
-          </li>
-          <li data-aos="fade-right" data-aos-delay="300">
-            <span class="hobby-ico"><i class="icon-screwdriver-wrench" aria-hidden="true"></i></span>
-            <div><strong>写小工具</strong> — 刷题本就是证据</div>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 留言区 -->
-    <section id="guestbook" class="section">
-      <div class="container">
-        <h2 class="section-title" data-aos="fade-up">留言</h2>
-        <p class="section-sub" data-aos="fade-up" data-aos-delay="100">不用注册，随便说两句，夸我损我都行。</p>
-        <div id="guestbook-list" class="guestbook-list" data-aos="fade-up" data-aos-delay="150"></div>
-        <form id="guestbook-form" class="guestbook-form" data-aos="fade-up" data-aos-delay="200">
-          <input id="gb-name" type="text" maxlength="20" placeholder="昵称（最多 20 字）" required>
-          <textarea id="gb-text" rows="3" maxlength="200" placeholder="说点什么…（最多 200 字）" required></textarea>
-          <button class="btn btn-primary" type="submit">发送留言</button>
-        </form>
-        <p id="gb-status" class="guestbook-status"></p>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- 页脚 -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <p>© 2026 Lim · 联系方式：<a href="mailto:lzy45400@gmail.com">lzy45400@gmail.com</a></p>
-      <p class="footer-sub">Made with <i class="icon-heart footer-heart" aria-hidden="true"></i> by Lim · Hosted on GitHub Pages</p>
+<!-- 作品 -->
+<section id="work" aria-label="作品">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="no">SEC.01</span><h2>作品</h2>
     </div>
-  </footer>
+  </div>
+  <div class="works">
+    <div class="wmain">
+      <p class="cat"><i>已上线</i> gzxxw.github.io/math</p>
+      <h3>高中数学刷题本</h3>
+      <p>题库是我自己一章一章编的：<b>200 个章节</b>，从「等式变形」排到「综合复习与期末冲刺」。
+        目前装了 50 道题，覆盖 10 个章节，每题带四个选项和一段解析。</p>
+      <p>点一下选项立刻出答案和解析，不用提交等判分。做错的题自动进错题本，
+        记录同步到云端，换台设备接着刷。</p>
+      <a class="golink" href="https://gzxxw.github.io/math" target="_blank" rel="noopener">打开刷题本</a>
+      <div class="demo" aria-label="真实题目示例">
+        <p class="demo-tag">真实题目 · 第 1 题</p>
+        <p class="q">已知 x+y=3，x²+y²=5，则 xy 的值为（　）</p>
+        <div class="opts" aria-hidden="true">
+          <span>A. 1</span><span class="ok">B. 2</span><span>C. 3</span><span>D. 4</span>
+        </div>
+        <p class="ana">解析：由 (x+y)² = x²+y²+2xy，代入得 3² = 5 + 2xy，解得 xy = 2。</p>
+      </div>
+    </div>
+    <div class="wside">
+      <h4>技术构成</h4>
+      <ul class="spec">
+        <li>真实章节数<b>200</b></li>
+        <li>在库题目<b>50</b></li>
+        <li>覆盖章节<b>10</b></li>
+        <li>前端 JS 模块<b>13</b></li>
+        <li>公式渲染<b>MathJax</b></li>
+        <li>错题本<b>自动归档</b></li>
+        <li>记录同步<b class="hi">云端</b></li>
+        <li>框架依赖<b>0</b></li>
+      </ul>
+    </div>
+  </div>
+  <div class="works rev">
+    <div class="wmain">
+      <p class="cat"><i>已上线</i> gzxxw.github.io/scsjyzx-mirror</p>
+      <h3>江油中学镜像站</h3>
+      <p>学校官网（四川省江油中学）访问不畅的时候，这个站顶上来：
+        <b>306 个文件、137MB</b> 的静态镜像，页面、图片、数据原样保留。</p>
+      <p>信息以官网为准——镜像只是让人在打不开的时候还能查到公告和通知。</p>
+      <a class="golink" href="https://gzxxw.github.io/scsjyzx-mirror" target="_blank" rel="noopener">打开镜像站</a>
+    </div>
+    <div class="wside">
+      <h4>镜像规模</h4>
+      <ul class="spec">
+        <li>文件总数<b>306</b></li>
+        <li>总体积<b>137MB</b></li>
+        <li>托管方式<b>GitHub Pages</b></li>
+        <li>维护成本<b class="hi">¥0</b></li>
+        <li>信息时效<b>以官网为准</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-  <!-- 动效脚本：AOS + Typed.js（defer，不阻塞渲染） -->
-  <script defer src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
-  <script defer src="js/main.js?v=20260927"></script>
+<!-- 爱好 -->
+<section id="play" aria-label="爱好">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="no">SEC.02</span><h2>不写代码的时候</h2>
+    </div>
+  </div>
+  <div class="plays">
+    <div class="play">
+      <h3>原神</h3>
+      <p>提瓦特大陆观光团，主要业务是看风景。</p>
+      <p class="uid">UID 277743783</p>
+    </div>
+    <div class="play">
+      <h3>星穹铁道</h3>
+      <p>开拓者已经上车，列车正在往前开。</p>
+      <p class="uid">UID 117119074</p>
+    </div>
+    <div class="play">
+      <h3>操纵 AI</h3>
+      <p>研究怎么让 AI 干活，而不是被 AI 干。</p>
+    </div>
+    <div class="play">
+      <h3>写小工具</h3>
+      <p>遇到麻烦就自己写一个解决掉，上面那两个产品就是这么来的。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 留言 -->
+<section id="guest" aria-label="留言">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="no">SEC.03</span><h2>留句话</h2>
+    </div>
+  </div>
+  <div class="gb">
+    <form class="gbform" id="gb-form">
+      <label for="gb-text">想说什么</label>
+      <textarea id="gb-text" maxlength="200" required
+        placeholder="夸我损我都行…"></textarea>
+      <button class="gbsend" type="submit">发送</button>
+      <p class="gbnote">点发送会带着这段话跳到 GitHub，用你自己的账号评论——我不碰你的密码，
+        也没有后端可以泄露它。</p>
+    </form>
+    <div class="gblist" id="gb-list" aria-live="polite">
+      <p class="gbempty">还没有留言，沙发等你来抢。</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <p class="motto">一切皆折腾<em>·</em>晚上搞机，白天刷题</p>
+    <p class="fine">© 2026 Lim · <a href="mailto:lzy45400@gmail.com">lzy45400@gmail.com</a>
+      · <a href="https://github.com/gzxxw" target="_blank" rel="noopener">GitHub</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var GIST = 'https://gist.github.com/gzxxw/52aae8bdc4e32cd3086952349545e75c';
+  var form = document.getElementById('gb-form');
+  var text = document.getElementById('gb-text');
+  var box  = document.getElementById('gb-list');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = text.value.trim();
+    if (!v) return;
+    window.open(GIST + '?comment=' + encodeURIComponent(v), '_blank', 'noopener');
+    text.value = '';
+  });
+  fetch('https://api.github.com/gists/52aae8bdc4e32cd3086952349545e75c/comments?per_page=50')
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (rows) {
+      if (!Array.isArray(rows) || !rows.length) return;
+      box.innerHTML = rows.map(function (c) {
+        var who = (c.user && c.user.login) ? c.user.login : '匿名';
+        var d = new Date(c.created_at);
+        var t = isNaN(d) ? '' : d.toLocaleDateString('zh-CN');
+        var body = String(c.body || '').replace(/[#*`>\[\]()!]/g, '').trim().slice(0, 140);
+        return '<div class="msg"><p class="msg-h"><b>' + who + '</b><time>' + t +
+               '</time></p><p>' + body + '</p></div>';
+      }).join('');
+    })
+    .catch(function () { /* 保留空状态 */ });
+})();
+</script>
 </body>
 </html>
